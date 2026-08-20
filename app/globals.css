@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+:root {
+  --color-parchment: #eae3d3;
+  --color-blush: #f3dccb;
+  --color-ink: #2b241e;
+  --color-black: #141110;
+  --color-terracotta: #e2926f;
+  --color-terracotta-soft: #eeb499;
+
+  --font-serif: var(--font-bodoni);
+  --font-script: var(--font-script);
+  --font-sans: var(--font-urbanist);
+
+  --ease-fluid: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-float: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@theme inline {
+  --color-parchment: var(--color-parchment);
+  --color-blush: var(--color-blush);
+  --color-ink: var(--color-ink);
+  --color-black: var(--color-black);
+  --color-terracotta: var(--color-terracotta);
+  --color-terracotta-soft: var(--color-terracotta-soft);
+  --font-serif: var(--font-serif);
+  --font-script: var(--font-script);
+  --font-sans: var(--font-sans);
+  --ease-fluid: var(--ease-fluid);
+  --ease-float: var(--ease-float);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-parchment);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--color-terracotta);
+  color: var(--color-parchment);
+}
+
+/* Hide native cursor on desktop where the floating cursor is active */
+html.has-floating-cursor,
+html.has-floating-cursor * {
+  cursor: none !important;
+}
+
+@media (max-width: 767px), (pointer: coarse) {
+  html.has-floating-cursor,
+  html.has-floating-cursor * {
+    cursor: auto !important;
+  }
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
