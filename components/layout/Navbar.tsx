@@ -4,11 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import { siteConfig } from "@/lib/content/siteConfig";
+import type { LiveSettings } from "@/lib/content/liveSettings";
 import { cn } from "@/lib/utils";
 import { FloatingButton } from "@/components/ui/FloatingButton";
 import { MobileMenu } from "@/components/layout/MobileMenu";
 
-export function Navbar() {
+export function Navbar({ settings }: { settings: LiveSettings }) {
   const [floating, setFloating] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { scrollY } = useScroll();
@@ -37,7 +38,7 @@ export function Navbar() {
                 floating ? "text-ink" : "text-parchment"
               )}
             >
-              {siteConfig.studioName}
+              {settings.studioName}
             </span>
           </Link>
 
@@ -76,7 +77,7 @@ export function Navbar() {
         </motion.header>
       </div>
 
-      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} settings={settings} />
     </>
   );
 }

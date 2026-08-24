@@ -2,13 +2,12 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
-import type { Film } from "@/lib/content/films";
-import { brand } from "@/lib/content/brandImages";
+import type { LiveFilm } from "@/lib/content/liveFilms";
 import { expandReveal, viewportOnce } from "@/lib/motion";
 
 type FilmCardProps = {
-  film: Film;
-  onPlay: (film: Film) => void;
+  film: LiveFilm;
+  onPlay: (film: LiveFilm) => void;
 };
 
 export function FilmCard({ film, onPlay }: FilmCardProps) {
@@ -24,7 +23,7 @@ export function FilmCard({ film, onPlay }: FilmCardProps) {
       className="group relative block h-[50vh] min-h-[340px] w-full overflow-hidden text-left"
     >
       <Image
-        src={brand[film.thumbnail]}
+        src={film.thumbnail}
         alt={film.title}
         fill
         className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110"

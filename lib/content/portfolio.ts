@@ -12,21 +12,23 @@ export const portfolioCategories = [
 
 export type PortfolioCategory = (typeof portfolioCategories)[number];
 
+// Verbatim from the studio's own portfolio deck (the PDF they hand to
+// couples) — do not paraphrase; this is the studio's own voice.
 export const categoryCopy: Record<PortfolioCategory, string> = {
   "Pre-Wedding":
-    "Designed to beautifully capture the love and chemistry between couples before their big day — creative concepts, stunning backdrops and cinematic storytelling.",
+    "At Unique Creations, our Pre-Wedding shoots are designed to beautifully capture the love and chemistry between couples before their big day. With creative concepts, stunning backdrops, and cinematic storytelling, we turn your journey of togetherness into timeless memories that reflect your unique bond.",
   "Groom's Haldi":
-    "The vibrant essence of the Haldi — candid moments, joyful colour and the warmth of family, preserved as a cherished memory.",
+    "At Unique Creations, we capture the vibrant essence of the Groom's Haldi with candid moments, joyful colors, and heartfelt emotions. From playful rituals to the warmth of family and friends, our photography and videography ensure every detail of this lively celebration is preserved as a cherished memory forever.",
   "Bride's Haldi":
-    "The grace and charm of a bride's traditional Haldi — the radiant glow of turmeric, laughter, and the blessings of loved ones.",
+    "At Unique Creations, we beautifully capture the grace and charm of a Bride's traditional Haldi ceremony. From the radiant glow of turmeric to the laughter and blessings of loved ones, our photography and videography preserve every vibrant detail, turning these heartfelt rituals into timeless memories filled with love and tradition.",
   Makeover:
-    "The vibrant charm of a stylish makeover — a perfect blend of tradition and modern elegance, from décor to the bride's stunning look.",
+    "At Unique Creations, we showcase the vibrant charm of a Stylish Makeover Haldi with a perfect blend of tradition and modern elegance. From trendy décor to the bride's stunning look and the joyful vibe of the celebration, our photography and videography capture every lively detail, turning the event into a collection of unforgettable memories.",
   "Wedding Day":
-    "The rich traditions and vibrant rituals of a Telugu wedding — every sacred moment and joyful celebration, preserved as a timeless story of love and culture.",
+    "At Unique Creations, we beautifully capture the rich traditions and vibrant rituals of a Telugu wedding with artistry and elegance. From the sacred moments of the ceremony to the joyful celebrations with family and friends, our photography and videography preserve every detail, ensuring your special day is remembered as a timeless story of love and culture.",
   "Half Saree":
-    "A celebration of tradition, grace and the gentle transition from childhood to womanhood — wrapped in vibrant silks and timeless rituals.",
+    "A celebration of tradition, grace and the gentle transition from childhood to womanhood. Wrapped in vibrant silks, radiant smiles, and timeless rituals, every moment tells a story of culture, blessings, and family love.",
   "Child Makeover":
-    "Every child is a little bundle of magic — pure smiles, sparkling eyes and endless innocence, gently enhanced rather than changed.",
+    "Every child is a little bundle of magic — pure smiles, sparkling eyes, and endless innocence. A child makeover isn't about changing who they are, but gently enhancing their natural charm while letting their personality shine through.",
 };
 
 export type PortfolioItem = {
@@ -37,8 +39,8 @@ export type PortfolioItem = {
 };
 
 export const portfolio: PortfolioItem[] = [
-  { id: "pw1", image: "preWedding1", category: "Pre-Wedding", orientation: "landscape" },
-  { id: "pw2", image: "preWedding2", category: "Pre-Wedding", orientation: "landscape" },
+  { id: "pw1", image: "preWedding1", category: "Pre-Wedding", orientation: "portrait" },
+  { id: "pw2", image: "preWedding2", category: "Pre-Wedding", orientation: "portrait" },
   { id: "pw3", image: "preWedding3", category: "Pre-Wedding", orientation: "portrait" },
 
   { id: "gh1", image: "groomSolo", category: "Groom's Haldi", orientation: "portrait" },
@@ -53,7 +55,7 @@ export const portfolio: PortfolioItem[] = [
   { id: "mk1", image: "makeoverBrideCloseup", category: "Makeover", orientation: "landscape" },
   { id: "mk2", image: "makeoverCoupleBw", category: "Makeover", orientation: "portrait" },
   { id: "mk3", image: "makeoverJewelryDetail", category: "Makeover", orientation: "portrait" },
-  { id: "mk4", image: "makeoverGroomDark", category: "Makeover", orientation: "landscape" },
+  { id: "mk4", image: "makeoverGroomDark", category: "Makeover", orientation: "portrait" },
 
   { id: "wd1", image: "weddingGroomPink", category: "Wedding Day", orientation: "portrait" },
   { id: "wd2", image: "weddingBridePlate", category: "Wedding Day", orientation: "landscape" },
@@ -66,8 +68,8 @@ export const portfolio: PortfolioItem[] = [
   { id: "hs2", image: "halfSaree2", category: "Half Saree", orientation: "landscape" },
   { id: "hs3", image: "halfSaree3", category: "Half Saree", orientation: "portrait" },
 
-  { id: "cm1", image: "childMakeover1", category: "Child Makeover", orientation: "landscape" },
-  { id: "cm2", image: "childMakeover2", category: "Child Makeover", orientation: "portrait" },
+  { id: "cm1", image: "childMakeover1", category: "Child Makeover", orientation: "portrait" },
+  { id: "cm2", image: "childMakeover2", category: "Child Makeover", orientation: "landscape" },
   { id: "cm3", image: "childMehndi", category: "Child Makeover", orientation: "landscape" },
   { id: "cm4", image: "childMakeover3", category: "Child Makeover", orientation: "portrait" },
 ];

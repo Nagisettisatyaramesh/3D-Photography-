@@ -29,7 +29,7 @@ export const services: Service[] = [
       "Your day, cut to be watched again — a film built around sound, pace and the moments that mattered most.",
     deliverables: ["Cinematic highlight film", "Full ceremony documentation", "4K delivery"],
     startingPrice: 120000,
-    image: "weddingGroomPink",
+    image: "weddingBridePlate",
   },
   {
     slug: "pre-wedding",
@@ -38,7 +38,7 @@ export const services: Service[] = [
       "A relaxed shoot away from the wedding-day schedule, designed to capture the chemistry between the two of you before the big day.",
     deliverables: ["Full-day, multi-location shoot", "Creative concepts & styling support", "Edited image set"],
     startingPrice: 45000,
-    image: "preWedding2",
+    image: "makeoverBrideCloseup",
   },
   {
     slug: "haldi-makeover",
@@ -47,7 +47,7 @@ export const services: Service[] = [
       "The colour, ritual and candid joy of Haldi and makeover functions — every detail preserved as it actually happened.",
     deliverables: ["Half or full-day coverage", "Candid family documentation", "Edited image set"],
     startingPrice: 35000,
-    image: "brideHaldi1",
+    image: "childMehndi",
   },
   {
     slug: "half-saree",
@@ -59,13 +59,13 @@ export const services: Service[] = [
     image: "halfSaree2",
   },
   {
-    slug: "destination",
-    name: "Destination Weddings",
+    slug: "child-makeover",
+    name: "Child Makeover",
     description:
-      "We travel with a small, considered crew so the story stays intimate wherever your celebration is happening.",
-    deliverables: ["Multi-day event coverage", "Travel & logistics handled", "Full photo + film team"],
-    startingPrice: 250000,
-    image: "weddingCeremony1",
+      "A gentle enhancement of a child's natural charm for a family function — pure smiles and sparkling eyes, nothing forced.",
+    deliverables: ["Half-day coverage", "Candid + posed portraits", "Edited image set"],
+    startingPrice: 20000,
+    image: "childMehndi",
   },
 ];
 

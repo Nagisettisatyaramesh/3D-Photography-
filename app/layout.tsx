@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import { Bodoni_Moda, Petit_Formal_Script, Urbanist } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
-import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
-import { FloatingCursor } from "@/components/layout/FloatingCursor";
-import { siteConfig } from "@/lib/content/siteConfig";
+import { getWebsiteSettings } from "@/lib/content/liveSettings";
 
 const bodoni = Bodoni_Moda({
   variable: "--font-bodoni",
@@ -24,21 +20,18 @@ const urbanist = Urbanist({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: `${siteConfig.studioName} — ${siteConfig.tagline}`,
-  description: siteConfig.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getWebsiteSettings();
+  return {
+    title: `${settings.studioName} — ${settings.tagline}`,
+    description: `Wedding photography and films by ${settings.studioName}.`,
+  };
+}
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${bodoni.variable} ${script.variable} ${urbanist.variable}`}>
-      <body className="bg-parchment text-ink antialiased">
-        <FloatingCursor />
-        <Navbar />
-        {children}
-        <Footer />
-        <WhatsAppButton />
-      </body>
+      <body className="bg-parchment text-ink antialiased">{children}</body>
     </html>
   );
 }

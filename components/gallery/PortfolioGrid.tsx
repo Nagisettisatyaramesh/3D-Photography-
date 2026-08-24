@@ -2,12 +2,11 @@
 
 import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
-import type { PortfolioItem } from "@/lib/content/portfolio";
-import { brand } from "@/lib/content/brandImages";
+import type { LivePortfolioItem } from "@/lib/content/livePortfolio";
 
 type PortfolioGridProps = {
-  items: PortfolioItem[];
-  onSelect: (item: PortfolioItem) => void;
+  items: LivePortfolioItem[];
+  onSelect: (item: LivePortfolioItem) => void;
 };
 
 export function PortfolioGrid({ items, onSelect }: PortfolioGridProps) {
@@ -30,8 +29,8 @@ export function PortfolioGrid({ items, onSelect }: PortfolioGridProps) {
             }`}
           >
             <Image
-              src={brand[item.image]}
-              alt={item.category}
+              src={item.image}
+              alt={item.title}
               fill
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
               sizes="(min-width: 1024px) 32vw, (min-width: 640px) 48vw, 100vw"

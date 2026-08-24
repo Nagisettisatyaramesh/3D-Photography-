@@ -24,21 +24,24 @@ export function Hero() {
 
   return (
     <section ref={sectionRef} className="relative h-[100svh] min-h-[680px] w-full overflow-hidden bg-parchment">
-      <div className="absolute inset-3 overflow-hidden md:inset-8">
+      <div className="absolute inset-0 overflow-hidden">
         <motion.div style={{ scale: imageScale, x: pointer.x, y: pointer.y }} className="absolute -inset-4">
           <Image
             src={brand.weddingCeremony2}
             alt="Groom seated during a Telugu wedding ceremony, warmly lit hall"
             fill
             priority
-            className="object-cover"
+            className="object-cover object-[center_28%]"
             sizes="100vw"
           />
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-black/35" />
       </div>
 
-      <motion.div style={{ y: contentY, opacity: contentOpacity }} className="relative z-10 flex h-full flex-col justify-between p-6 md:p-12">
+      <motion.div
+        style={{ y: contentY, opacity: contentOpacity }}
+        className="relative z-10 flex h-full flex-col justify-between px-6 pb-6 pt-28 md:px-12 md:pb-12 md:pt-36"
+      >
         <div className="flex items-start justify-between">
           <motion.p
             initial={{ opacity: 0, y: 14 }}
@@ -50,7 +53,7 @@ export function Hero() {
           </motion.p>
 
           <FloatingChip range={[16, -16]} className="hidden sm:inline-flex" dark>
-            Est. Telangana
+            Est. Andhra Pradesh
           </FloatingChip>
         </div>
 

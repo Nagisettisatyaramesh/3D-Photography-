@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSupabaseServerClient, isSupabaseServerConfigured } from "@/lib/supabase/server";
+import { getSupabaseAdminClient, isSupabaseAdminConfigured } from "@/lib/supabase/adminClient";
 
 const MOBILE_REGEX = /^[+]?[\d\s-]{10,15}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
     }
   }
 
-  if (!isSupabaseServerConfigured) {
+  if (!isSupabaseAdminConfigured) {
     return NextResponse.json(
       {
         error:
@@ -57,7 +57,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const supabase = getSupabaseServerClient()!;
+  const supabase = getSupabaseAdminClient()!;
   const { error } = await supabase.from("leads").insert({
     full_name: fullName.trim(),
     mobile: mobile.trim(),

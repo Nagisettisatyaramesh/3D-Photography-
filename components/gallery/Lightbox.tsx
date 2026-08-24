@@ -3,14 +3,13 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
-import type { PortfolioItem } from "@/lib/content/portfolio";
-import { brand } from "@/lib/content/brandImages";
+import type { LivePortfolioItem } from "@/lib/content/livePortfolio";
 
 type LightboxProps = {
-  items: PortfolioItem[];
-  activeItem: PortfolioItem | null;
+  items: LivePortfolioItem[];
+  activeItem: LivePortfolioItem | null;
   onClose: () => void;
-  onNavigate: (item: PortfolioItem) => void;
+  onNavigate: (item: LivePortfolioItem) => void;
 };
 
 export function Lightbox({ items, activeItem, onClose, onNavigate }: LightboxProps) {
@@ -54,8 +53,8 @@ export function Lightbox({ items, activeItem, onClose, onNavigate }: LightboxPro
             className="relative flex max-h-[78vh] w-full max-w-4xl items-center justify-center"
           >
             <Image
-              src={brand[activeItem.image]}
-              alt={activeItem.category}
+              src={activeItem.image}
+              alt={activeItem.title}
               width={1400}
               height={1400}
               className="max-h-[78vh] w-auto object-contain"

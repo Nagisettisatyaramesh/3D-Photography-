@@ -3,23 +3,11 @@
 import { motion } from "motion/react";
 import { siteConfig } from "@/lib/content/siteConfig";
 import { driftUp, viewportOnce } from "@/lib/motion";
-import { FloatingChip } from "@/components/ui/FloatingChip";
 
 export function FloatingStatement() {
   return (
-    <section className="relative overflow-hidden px-6 py-32 md:py-48">
-      <div className="pointer-events-none absolute left-[6%] top-10 hidden md:block">
-        <FloatingChip range={[24, -24]} rotate={-4}>
-          Since day one
-        </FloatingChip>
-      </div>
-      <div className="pointer-events-none absolute bottom-10 right-[8%] hidden md:block">
-        <FloatingChip range={[-20, 20]} rotate={3}>
-          Candid · Traditional · Cinematic
-        </FloatingChip>
-      </div>
-
-      <div className="mx-auto max-w-4xl text-center">
+    <section className="overflow-hidden px-6 py-20 md:py-28">
+      <div className="relative mx-auto max-w-4xl text-center">
         <motion.p
           variants={driftUp}
           initial="hidden"

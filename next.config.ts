@@ -10,6 +10,14 @@ if (process.env.NODE_ENV === "development") {
 }
 
 const nextConfig: NextConfig = {
+  // The quotation PDF route reads font files and the studio's portfolio PDF
+  // template from lib/pdf/ via fs at render time — Next's file tracer can't
+  // statically see those `path.join`-built paths, so on Vercel's serverless
+  // build the files would otherwise be missing at runtime.
+  outputFileTracingIncludes: {
+    "app/admin/(protected)/quotations/[id]/pdf/route": ["./lib/pdf/fonts/**", "./lib/pdf/assets/**"],
+    "app/admin/(protected)/quotations/[id]/page": ["./lib/pdf/fonts/**", "./lib/pdf/assets/**"],
+  },
   images: {
     remotePatterns: [
       {

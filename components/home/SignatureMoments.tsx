@@ -9,7 +9,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 const moments: { image: BrandImageKey; label: string; range: [number, number] }[] = [
   { image: "brideHaldi1", label: "Bride's Haldi", range: [60, -30] },
   { image: "halfSaree3", label: "Half Saree", range: [0, -60] },
-  { image: "makeoverBrideCloseup", label: "Makeover", range: [80, -20] },
+  { image: "makeoverJewelryDetail", label: "Makeover", range: [80, -20] },
 ];
 
 export function SignatureMoments() {

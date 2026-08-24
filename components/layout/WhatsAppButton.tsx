@@ -1,13 +1,12 @@
 "use client";
 
 import { motion } from "motion/react";
-import { siteConfig } from "@/lib/content/siteConfig";
 import { buildWhatsAppLink } from "@/lib/utils";
 
-export function WhatsAppButton() {
+export function WhatsAppButton({ whatsapp }: { whatsapp: string }) {
   return (
     <motion.a
-      href={buildWhatsAppLink("Hi! I'd love to talk about my wedding date.", siteConfig.whatsapp)}
+      href={buildWhatsAppLink("Hi! I'd love to talk about my wedding date.", whatsapp)}
       target="_blank"
       rel="noopener noreferrer"
       data-cursor-hover="Chat"

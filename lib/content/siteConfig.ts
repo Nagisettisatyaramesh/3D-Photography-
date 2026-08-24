@@ -12,9 +12,9 @@ export const siteConfig = {
   phone: "+91 98765 43210",
   whatsapp: "919876543210",
   email: "hello@uniquecreations.in",
-  address: "Hyderabad, Telangana",
+  address: "Andhra Pradesh",
   instagram: "https://instagram.com/uniquecreations",
-  mapsUrl: "https://maps.google.com/?q=Hyderabad+Telangana",
+  mapsUrl: "https://maps.google.com/?q=Andhra+Pradesh",
   navLinks: [
     { label: "Home", href: "/" },
     { label: "Photography", href: "/photography" },
@@ -26,8 +26,8 @@ export const siteConfig = {
   ],
   footerLinks: {
     services: [
-      { label: "Wedding Photography", href: "/services#photography" },
-      { label: "Cinematic Films", href: "/services#films" },
+      { label: "Wedding Photography", href: "/services#wedding-photography" },
+      { label: "Cinematic Films", href: "/services#cinematic-films" },
       { label: "Pre-Wedding", href: "/services#pre-wedding" },
       { label: "Half Saree Function", href: "/services#half-saree" },
     ],

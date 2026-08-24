@@ -12,7 +12,7 @@ export function FeaturedStory() {
   const { nodeRef: frontRef, y: frontY } = useParallax([-30, 30]);
 
   return (
-    <section className="relative px-6 py-28 md:px-12 md:py-40">
+    <section className="relative px-6 py-16 md:px-12 md:py-24">
       <div className="mx-auto grid max-w-6xl gap-16 md:grid-cols-2 md:items-center">
         <motion.div
           variants={driftUp}

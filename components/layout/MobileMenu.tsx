@@ -4,14 +4,16 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { siteConfig } from "@/lib/content/siteConfig";
+import type { LiveSettings } from "@/lib/content/liveSettings";
 import { staggerFloat, driftUp } from "@/lib/motion";
 
 type MobileMenuProps = {
   open: boolean;
   onClose: () => void;
+  settings: LiveSettings;
 };
 
-export function MobileMenu({ open, onClose }: MobileMenuProps) {
+export function MobileMenu({ open, onClose, settings }: MobileMenuProps) {
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     return () => {
@@ -30,7 +32,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
           className="fixed inset-0 z-[100] flex flex-col justify-between bg-ink px-8 pb-10 pt-8 text-parchment"
         >
           <div className="flex items-center justify-between">
-            <span className="font-serif text-xl italic">{siteConfig.studioName}</span>
+            <span className="font-serif text-xl italic">{settings.studioName}</span>
             <button
               type="button"
               onClick={onClose}
@@ -75,7 +77,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
             >
               Get Your Quote
             </Link>
-            <p className="text-[11px] uppercase tracking-[0.18em] text-parchment/45">{siteConfig.phone}</p>
+            <p className="text-[11px] uppercase tracking-[0.18em] text-parchment/45">{settings.phone}</p>
           </motion.div>
         </motion.div>
       )}

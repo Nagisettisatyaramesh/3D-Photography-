@@ -2,12 +2,22 @@
 
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import type { Film } from "@/lib/content/films";
+import type { LiveFilm } from "@/lib/content/liveFilms";
 
 type FilmModalProps = {
-  film: Film | null;
+  film: LiveFilm | null;
   onClose: () => void;
 };
+
+function toEmbedUrl(url: string): string | null {
+  const youtube = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]+)/);
+  if (youtube) return `https://www.youtube.com/embed/${youtube[1]}?autoplay=1`;
+
+  const vimeo = url.match(/vimeo\.com\/(\d+)/);
+  if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}?autoplay=1`;
+
+  return null;
+}
 
 export function FilmModal({ film, onClose }: FilmModalProps) {
   useEffect(() => {
@@ -44,13 +54,20 @@ export function FilmModal({ film, onClose }: FilmModalProps) {
             onClick={(e) => e.stopPropagation()}
             className="relative w-full max-w-5xl"
           >
-            <video
-              key={film.videoUrl}
-              src={film.videoUrl}
-              controls
-              autoPlay
-              className="aspect-video w-full bg-black"
-            />
+            {(() => {
+              const embedUrl = toEmbedUrl(film.videoUrl);
+              return embedUrl ? (
+                <iframe
+                  key={embedUrl}
+                  src={embedUrl}
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  allowFullScreen
+                  className="aspect-video w-full bg-black"
+                />
+              ) : (
+                <video key={film.videoUrl} src={film.videoUrl} controls autoPlay className="aspect-video w-full bg-black" />
+              );
+            })()}
             <div className="mt-4 flex items-center justify-between text-parchment">
               <div>
                 <p className="font-serif text-2xl italic">{film.title}</p>
