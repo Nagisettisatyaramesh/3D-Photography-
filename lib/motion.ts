@@ -23,10 +23,12 @@ export const viewportOnce = { once: true, margin: "-12% 0px -12% 0px" } as const
 
 /** Drift up into place with a soft blur-in — the default reveal for text and floating chips. */
 export const driftUp: Variants = {
-  hidden: { opacity: 0, y: 46, filter: "blur(6px)" },
+  hidden: { opacity: 0, y: 46, rotateX: 16, transformPerspective: 1000, filter: "blur(6px)" },
   visible: {
     opacity: 1,
     y: 0,
+    rotateX: 0,
+    transformPerspective: 1000,
     filter: "blur(0px)",
     transition: floatSpring,
   },
@@ -34,10 +36,13 @@ export const driftUp: Variants = {
 
 /** Large photographs expanding into frame — softer and slower than a plain fade. */
 export const expandReveal: Variants = {
-  hidden: { opacity: 0, scale: 1.16, filter: "blur(14px)" },
+  hidden: { opacity: 0, scale: 1.16, rotateY: -18, rotateX: 6, transformPerspective: 1400, filter: "blur(14px)" },
   visible: {
     opacity: 1,
     scale: 1,
+    rotateY: 0,
+    rotateX: 0,
+    transformPerspective: 1400,
     filter: "blur(0px)",
     transition: { duration: 1.6, ease: easeFluid },
   },

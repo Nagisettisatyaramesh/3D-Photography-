@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import type { LiveFilm } from "@/lib/content/liveFilms";
 import { expandReveal, viewportOnce } from "@/lib/motion";
+import { Tilt3D } from "@/components/ui/Tilt3D";
 
 type FilmCardProps = {
   film: LiveFilm;
@@ -12,6 +13,7 @@ type FilmCardProps = {
 
 export function FilmCard({ film, onPlay }: FilmCardProps) {
   return (
+    <Tilt3D max={7}>
     <motion.button
       type="button"
       onClick={() => onPlay(film)}
@@ -47,5 +49,6 @@ export function FilmCard({ film, onPlay }: FilmCardProps) {
         <p className="eyebrow mt-2 opacity-80">{film.type}</p>
       </div>
     </motion.button>
+    </Tilt3D>
   );
 }

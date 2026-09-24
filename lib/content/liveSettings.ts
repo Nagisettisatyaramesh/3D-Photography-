@@ -9,6 +9,7 @@ export type LiveSettings = {
   email: string;
   address: string;
   instagram: string;
+  youtube: string;
   heroImage: string | null;
 };
 
@@ -26,6 +27,7 @@ export async function getWebsiteSettings(): Promise<LiveSettings> {
         email: data.email || siteConfig.email,
         address: data.address || siteConfig.address,
         instagram: data.instagram || siteConfig.instagram,
+        youtube: data.youtube || siteConfig.youtube,
         heroImage: data.hero_image_url,
       };
     }
@@ -39,6 +41,7 @@ export async function getWebsiteSettings(): Promise<LiveSettings> {
     email: siteConfig.email,
     address: siteConfig.address,
     instagram: siteConfig.instagram,
+    youtube: siteConfig.youtube,
     heroImage: null,
   };
 }

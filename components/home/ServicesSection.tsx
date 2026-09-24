@@ -1,6 +1,6 @@
 import { getServices, getPricingNote } from "@/lib/content/liveServices";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { ServiceRow } from "@/components/home/ServiceRow";
+import { ServiceFlipCard } from "@/components/home/ServiceFlipCard";
 
 export async function ServicesSection() {
   const [services, pricingNote] = await Promise.all([getServices(), getPricingNote()]);
@@ -10,9 +10,9 @@ export async function ServicesSection() {
       <SectionHeading eyebrow="Services" title="What we bring to your celebration." className="mb-6" />
       <p className="max-w-md text-sm text-ink/55 md:text-base">{pricingNote}</p>
 
-      <div className="mt-20 flex flex-col gap-24 md:gap-32">
+      <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {services.slice(0, 4).map((service, i) => (
-          <ServiceRow key={service.id} service={service} reverse={i % 2 === 1} />
+          <ServiceFlipCard key={service.id} service={service} index={i} />
         ))}
       </div>
     </section>

@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { brand, type BrandImageKey } from "@/lib/content/brandImages";
 import { driftUp, useParallax, viewportOnce } from "@/lib/motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Tilt3D } from "@/components/ui/Tilt3D";
 
 const moments: { image: BrandImageKey; label: string; range: [number, number] }[] = [
   { image: "brideHaldi1", label: "Bride's Haldi", range: [60, -30] },
@@ -46,9 +47,11 @@ function MomentCard({
       whileInView="visible"
       viewport={viewportOnce}
     >
-      <div className="relative aspect-[3/4] w-full overflow-hidden">
-        <Image src={brand[image]} alt={label} fill className="object-cover" sizes="(min-width: 640px) 30vw, 90vw" />
-      </div>
+      <Tilt3D>
+        <div className="relative aspect-[3/4] w-full overflow-hidden shadow-[0_30px_60px_-30px_rgba(20,17,16,0.5)]">
+          <Image src={brand[image]} alt={label} fill className="object-cover" sizes="(min-width: 640px) 30vw, 90vw" />
+        </div>
+      </Tilt3D>
       <p className="mt-4 text-center font-serif text-xl italic">{label}</p>
     </motion.div>
   );

@@ -112,10 +112,15 @@ create table if not exists website_settings (
   email text,
   address text,
   instagram text,
+  youtube text,
   hero_image_url text,
   updated_at timestamptz not null default now(),
   constraint website_settings_singleton check (id = 1)
 );
+
+-- Adds the youtube column to a website_settings table created before this
+-- field existed (safe to re-run; no-op once the column is present).
+alter table website_settings add column if not exists youtube text;
 
 alter table website_settings enable row level security;
 

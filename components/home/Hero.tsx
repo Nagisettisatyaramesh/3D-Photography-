@@ -1,13 +1,11 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
 import { motion, useScroll, useTransform } from "motion/react";
-import { brand } from "@/lib/content/brandImages";
 import { siteConfig } from "@/lib/content/siteConfig";
-import { usePointerDrift } from "@/lib/motion";
 import { FloatingButton } from "@/components/ui/FloatingButton";
 import { FloatingChip } from "@/components/ui/FloatingChip";
+import { HeroRing } from "@/components/home/HeroRing";
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -16,27 +14,12 @@ export function Hero() {
     offset: ["start start", "end start"],
   });
 
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.22]);
   const contentY = useTransform(scrollYProgress, [0, 1], [0, -80]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
-  const pointer = usePointerDrift(sectionRef, 14);
-
   return (
-    <section ref={sectionRef} className="relative h-[100svh] min-h-[680px] w-full overflow-hidden bg-parchment">
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div style={{ scale: imageScale, x: pointer.x, y: pointer.y }} className="absolute -inset-4">
-          <Image
-            src={brand.weddingCeremony2}
-            alt="Groom seated during a Telugu wedding ceremony, warmly lit hall"
-            fill
-            priority
-            className="object-cover object-[center_28%]"
-            sizes="100vw"
-          />
-        </motion.div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-black/35" />
-      </div>
+    <section ref={sectionRef} className="relative h-[100svh] min-h-[680px] w-full overflow-hidden bg-black">
+      <HeroRing />
 
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}

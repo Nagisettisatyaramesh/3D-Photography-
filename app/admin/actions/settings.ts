@@ -17,6 +17,7 @@ export async function updateWebsiteSettings(formData: FormData) {
     email: String(formData.get("email") || "") || null,
     address: String(formData.get("address") || "") || null,
     instagram: String(formData.get("instagram") || "") || null,
+    youtube: String(formData.get("youtube") || "") || null,
     updated_at: new Date().toISOString(),
   };
 

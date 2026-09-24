@@ -19,9 +19,9 @@ export function PortfolioGrid({ items, onSelect }: PortfolioGridProps) {
             key={item.id}
             layout
             onClick={() => onSelect(item)}
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.96 }}
+            initial={{ opacity: 0, scale: 0.94, rotateX: 22, transformPerspective: 1200 }}
+            animate={{ opacity: 1, scale: 1, rotateX: 0, transformPerspective: 1200 }}
+            exit={{ opacity: 0, scale: 0.94, rotateX: -12, transformPerspective: 1200 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             data-cursor-hover="View"
             className={`group relative mb-5 block w-full overflow-hidden bg-blush/40 md:mb-8 ${

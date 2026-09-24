@@ -19,14 +19,26 @@ export function Footer({ settings }: { settings: LiveSettings }) {
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-parchment/60">
             {siteConfig.description}
           </p>
-          <a
-            href={settings.instagram}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 inline-block text-[11px] uppercase tracking-[0.18em] text-terracotta hover:text-parchment"
-          >
-            Follow on Instagram →
-          </a>
+          <div className="mt-6 flex flex-col gap-2">
+            <a
+              href={settings.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block w-fit text-[11px] uppercase tracking-[0.18em] text-terracotta hover:text-parchment"
+            >
+              Follow on Instagram →
+            </a>
+            {settings.youtube && (
+              <a
+                href={settings.youtube}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block w-fit text-[11px] uppercase tracking-[0.18em] text-terracotta hover:text-parchment"
+              >
+                Watch on YouTube →
+              </a>
+            )}
+          </div>
         </div>
 
         <div>

@@ -13,7 +13,8 @@ export const siteConfig = {
   whatsapp: "919876543210",
   email: "hello@uniquecreations.in",
   address: "Andhra Pradesh",
-  instagram: "https://instagram.com/uniquecreations",
+  instagram: "https://www.instagram.com/uniquecreations.av",
+  youtube: "https://www.youtube.com/@uniquecreations2047",
   mapsUrl: "https://maps.google.com/?q=Andhra+Pradesh",
   navLinks: [
     { label: "Home", href: "/" },

@@ -12,6 +12,7 @@ type Settings = {
   email: string | null;
   address: string | null;
   instagram: string | null;
+  youtube: string | null;
   hero_image_url: string | null;
 };
 
@@ -51,6 +52,9 @@ export function SettingsForm({ settings }: { settings: Settings }) {
       </Field>
       <Field label="Instagram URL">
         <input name="instagram" defaultValue={settings.instagram ?? ""} className={inputClass} />
+      </Field>
+      <Field label="YouTube URL">
+        <input name="youtube" defaultValue={settings.youtube ?? ""} className={inputClass} />
       </Field>
       <Field label="Homepage Hero Image">
         {settings.hero_image_url && (
