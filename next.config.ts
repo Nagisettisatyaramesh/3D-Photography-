@@ -24,6 +24,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+      {
+        protocol: "https",
+        hostname: "i.ytimg.com",
+      },
     ],
     // The dev sandbox's network intercepts HTTPS with a cert Node's fetch
     // won't trust, which breaks the built-in image optimizer's server-side
