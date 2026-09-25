@@ -4,14 +4,13 @@ import { Bodoni_Moda, Petit_Formal_Script, Urbanist } from "next/font/google";
 import "./globals.css";
 import { getWebsiteSettings } from "@/lib/content/liveSettings";
 
-// AI Website Assistant chatbot widget. The env vars let the widget source
-// and client id be swapped (e.g. once the backend moves off its temporary
-// test tunnel to a permanent deployment) without another code change; the
-// fallbacks below are today's values so the widget still works if those
-// vars aren't set in Vercel's project settings yet.
-const CHATBOT_WIDGET_SRC =
-  process.env.NEXT_PUBLIC_CHATBOT_WIDGET_SRC || "https://cegle-223-196-192-103.free.pinggy.net/widget.js";
+// AI Website Assistant chatbot widget — only loaded when its source is set
+// in the environment. (It used to fall back to a temporary tunnel URL that
+// is no longer reachable, which made every page request a dead script.)
+const CHATBOT_WIDGET_SRC = process.env.NEXT_PUBLIC_CHATBOT_WIDGET_SRC;
 const CHATBOT_CLIENT_ID = process.env.NEXT_PUBLIC_CHATBOT_CLIENT_ID || "UNIQUE_CREATIONS_001";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://3-d-photography.vercel.app";
 
 const bodoni = Bodoni_Moda({
   variable: "--font-bodoni",
@@ -32,9 +31,22 @@ const urbanist = Urbanist({
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getWebsiteSettings();
+  const description = `Wedding photography and cinematic films by ${settings.studioName} — ${settings.tagline}.`;
   return {
-    title: `${settings.studioName} — ${settings.tagline}`,
-    description: `Wedding photography and films by ${settings.studioName}.`,
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: `${settings.studioName} — ${settings.tagline}`,
+      template: `%s — ${settings.studioName}`,
+    },
+    description,
+    openGraph: {
+      type: "website",
+      siteName: settings.studioName,
+      title: `${settings.studioName} — ${settings.tagline}`,
+      description,
+      images: [{ url: "/brand/wedding-ceremony-2.jpg", alt: `${settings.studioName} wedding photography` }],
+    },
+    twitter: { card: "summary_large_image" },
   };
 }
 
@@ -43,7 +55,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={`${bodoni.variable} ${script.variable} ${urbanist.variable}`}>
       <body className="bg-parchment text-ink antialiased">
         {children}
-        <Script src={CHATBOT_WIDGET_SRC} data-client-id={CHATBOT_CLIENT_ID} strategy="afterInteractive" />
+        {CHATBOT_WIDGET_SRC && (
+          <Script src={CHATBOT_WIDGET_SRC} data-client-id={CHATBOT_CLIENT_ID} strategy="afterInteractive" />
+        )}
       </body>
     </html>
   );
