@@ -3,6 +3,7 @@ import { DepthStatement } from "@/components/home/DepthStatement";
 import { FeaturedStory } from "@/components/home/FeaturedStory";
 import { Coverflow } from "@/components/home/Coverflow";
 import { ChapterCube } from "@/components/home/ChapterCube";
+import { CameraPath } from "@/components/home/CameraPath";
 import { FilmsTeaser } from "@/components/home/FilmsTeaser";
 import { SignatureMoments } from "@/components/home/SignatureMoments";
 import { ServicesSection } from "@/components/home/ServicesSection";
@@ -19,6 +20,7 @@ export default function Home() {
       <DepthStatement />
       <FeaturedStory />
       <Coverflow />
+      <CameraPath />
       <ChapterCube />
       <FilmsTeaser />
       <SignatureMoments />

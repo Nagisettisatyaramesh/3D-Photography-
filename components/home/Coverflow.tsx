@@ -6,14 +6,17 @@ import { brand, type BrandImageKey } from "@/lib/content/brandImages";
 import { driftUp, viewportOnce } from "@/lib/motion";
 import { FloatingButton } from "@/components/ui/FloatingButton";
 
-// [image, caption, rotateY deg, translateZ px] — centre frame faces front,
-// the rest fan back toward the edges; hover pulls any frame out of the stack.
+// [image, caption, rotateY deg, translateZ px] — one slot per stack
+// position, ordered to move through the categories (bride, beach, half
+// saree, ceremony, pre-wedding, makeover, child makeover) rather than
+// repeating a category back-to-back; centre frame faces front, the rest
+// fan back toward the edges; hover pulls any frame forward.
 const cards: [BrandImageKey, string, number, number][] = [
-  ["preWedding1", "Pre-Wedding", 44, -120],
-  ["weddingCeremony3", "Wedding Day", 32, -70],
-  ["weddingBrideOrange", "Wedding Day", 18, -30],
-  ["preWedding2", "Pre-Wedding", 0, 30],
-  ["halfSaree1", "Half Saree", -18, -30],
+  ["weddingBrideOrange", "Wedding Day", 44, -120],
+  ["preWedding2", "Pre-Wedding", 32, -70],
+  ["halfSaree1", "Half Saree", 18, -30],
+  ["weddingCeremony3", "Wedding Day", 0, 30],
+  ["preWedding1", "Pre-Wedding", -18, -30],
   ["makeoverGroomDark", "Makeover", -32, -70],
   ["childMakeover2", "Child Makeover", -44, -120],
 ];
@@ -42,7 +45,14 @@ export function Coverflow() {
               transform: `rotateY(${rot}deg) translateZ(${z}px)`,
             }}
           >
-            <Image src={brand[key]} alt={caption} fill sizes="270px" className="scale-110 object-cover" />
+            <Image
+              src={brand[key]}
+              alt={caption}
+              fill
+              sizes="270px"
+              priority={i < 3}
+              className="scale-110 object-cover"
+            />
           </div>
         ))}
       </div>
