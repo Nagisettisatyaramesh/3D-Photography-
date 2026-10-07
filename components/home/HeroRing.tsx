@@ -56,7 +56,11 @@ export function HeroRing() {
                 src={p.src}
                 alt={p.alt}
                 fill
-                sizes="260px"
+                // Every panel but the front-facing one sits at a steep
+                // rotateY angle on the cylinder, so an exact-size source
+                // looks softened once Chromium perspective-warps it — see
+                // the matching note in Coverflow.tsx.
+                sizes="(max-width: 768px) 360px, 520px"
                 quality={92}
                 priority={i < 3}
                 className="scale-[1.12] object-cover"
