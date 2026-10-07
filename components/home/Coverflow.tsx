@@ -49,7 +49,12 @@ export function Coverflow() {
               src={brand[key]}
               alt={caption}
               fill
-              sizes="270px"
+              // Requested well above the frame's CSS size (190/270px): these
+              // cards sit at steep rotateY angles, and Chromium rasterizes
+              // an image at its CSS size *before* perspective-warping it to
+              // that angle, so an exact-size source looks visibly softened
+              // once foreshortened. The extra source pixels survive that warp.
+              sizes="(max-width: 768px) 420px, 560px"
               quality={92}
               priority={i < 3}
               className="scale-110 object-cover"
