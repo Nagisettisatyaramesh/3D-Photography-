@@ -29,12 +29,18 @@ const nextConfig: NextConfig = {
         hostname: "i.ytimg.com",
       },
     ],
-    // The dev sandbox's network intercepts HTTPS with a cert Node's fetch
-    // won't trust, which breaks the built-in image optimizer's server-side
-    // fetch to Unsplash. Serving these remote placeholder images unoptimized
-    // (browser loads them directly) sidesteps that; swap for real
-    // studio-hosted media in Phase 3 and this can be removed.
-    unoptimized: true,
+    // The LOCAL dev sandbox's network intercepts HTTPS with a cert Node's
+    // fetch won't trust, which breaks the built-in image optimizer's
+    // server-side fetch to Unsplash. Scoped to development only — on
+    // Vercel this resizes every photo down to the size it's actually
+    // shown at (the real cause of slow loads, not the JPEG quality), at
+    // quality 92 on hero/gallery photos so there's no visible softening.
+    unoptimized: process.env.NODE_ENV === "development",
+    // Next.js 16 only serves quality values listed here (default: [75]).
+    // 92 is used on the hero/gallery photos for high clarity at the
+    // resized dimensions; 75 stays available as next/image's own default
+    // for every other photo on the site.
+    qualities: [75, 92, 100],
   },
 };
 

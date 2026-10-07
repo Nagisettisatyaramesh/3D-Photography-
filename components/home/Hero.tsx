@@ -57,7 +57,7 @@ export function Hero() {
                 initial={{ opacity: 0, y: "100%" }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 + i * 0.15, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                className="block overflow-hidden"
+                className="block overflow-hidden pb-[0.14em] -mb-[0.14em]"
               >
                 <span className="block">{line}</span>
               </motion.span>

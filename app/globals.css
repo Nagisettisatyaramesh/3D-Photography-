@@ -91,8 +91,10 @@ html.has-floating-cursor * {
   to { transform: rotateY(360deg); }
 }
 @keyframes cube-spin {
-  from { transform: rotateX(-18deg) rotateY(0deg); }
-  to { transform: rotateX(-18deg) rotateY(360deg); }
+  /* Pure Y-axis turn (no X tilt) — tilting revealed the cube's top panel
+     over each face, making every photo look cut off along the top edge. */
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
 }
 .ring3d {
   transform-style: preserve-3d;
