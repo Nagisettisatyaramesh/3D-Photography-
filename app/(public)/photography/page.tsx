@@ -1,6 +1,7 @@
 import { getPortfolioItems, getPortfolioCategories } from "@/lib/content/livePortfolio";
 import { brand } from "@/lib/content/brandImages";
 import { PhotographyGallery } from "@/components/gallery/PhotographyGallery";
+import { AlbumBook } from "@/components/gallery/AlbumBook";
 import { RevealText } from "@/components/ui/RevealText";
 import { HeroImage } from "@/components/ui/HeroImage";
 
@@ -22,6 +23,7 @@ export default async function PhotographyPage() {
         </div>
       </section>
 
+      <AlbumBook items={items} />
       <PhotographyGallery items={items} categories={categories} />
     </main>
   );

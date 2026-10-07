@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useSpring } from "motion/react";
 import { brand } from "@/lib/content/brandImages";
@@ -24,8 +24,23 @@ export function HeroRing() {
   const py = useMotionValue(0);
   const rotY = useSpring(px, { stiffness: 60, damping: 20 });
   const rotX = useSpring(py, { stiffness: 60, damping: 20 });
+  // Phones and touch devices get a lighter ring: fewer photos, lighter
+  // shadows and no pointer tracking.
+  const [lite, setLite] = useState(false);
 
   useEffect(() => {
+    const mql = window.matchMedia("(max-width: 767px), (pointer: coarse)");
+    const update = () => setLite(mql.matches);
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, []);
+
+  const shown = lite ? panels.filter((_, i) => i % 2 === 0).slice(0, 5) : panels;
+  const step = 360 / shown.length;
+
+  useEffect(() => {
+    if (lite) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     function move(e: PointerEvent) {
       px.set((e.clientX / window.innerWidth - 0.5) * 22);
@@ -34,7 +49,7 @@ export function HeroRing() {
     py.set(-9);
     window.addEventListener("pointermove", move);
     return () => window.removeEventListener("pointermove", move);
-  }, [px, py]);
+  }, [px, py, lite]);
 
   return (
     <div aria-hidden className="absolute inset-0 overflow-hidden" style={{ perspective: 1700, perspectiveOrigin: "50% 46%" }}>
@@ -46,13 +61,22 @@ export function HeroRing() {
         className="absolute left-1/2 top-[46%] h-0 w-0"
       >
         <div className="ring3d absolute left-0 top-0 h-0 w-0 [--ring-radius:330px] md:[--ring-radius:620px]">
-          {panels.map((p, i) => (
+          {shown.map((p, i) => (
             <div
               key={p.src}
-              className="absolute -left-[90px] -top-[130px] h-[260px] w-[180px] overflow-hidden rounded-md shadow-[0_40px_80px_rgba(0,0,0,0.55)] md:-left-[130px] md:-top-[190px] md:h-[380px] md:w-[260px]"
-              style={{ transform: `rotateY(${i * 45}deg) translateZ(var(--ring-radius, 440px))` }}
+              className={`absolute -left-[90px] -top-[130px] h-[260px] w-[180px] overflow-hidden rounded-md md:-left-[130px] md:-top-[190px] md:h-[380px] md:w-[260px] ${
+                lite ? "" : "shadow-[0_40px_80px_rgba(0,0,0,0.55)]"
+              }`}
+              style={{ transform: `rotateY(${i * step}deg) translateZ(var(--ring-radius, 440px))` }}
             >
-              <Image src={p.src} alt={p.alt} fill sizes="260px" className="scale-[1.12] object-cover" />
+              <Image
+                src={p.src}
+                alt={p.alt}
+                fill
+                sizes="260px"
+                priority={i < 3}
+                className="scale-[1.12] object-cover"
+              />
             </div>
           ))}
         </div>
