@@ -52,7 +52,15 @@ export function HeroRing() {
               className="absolute -left-[90px] -top-[130px] h-[260px] w-[180px] overflow-hidden rounded-md shadow-[0_40px_80px_rgba(0,0,0,0.55)] md:-left-[130px] md:-top-[190px] md:h-[380px] md:w-[260px]"
               style={{ transform: `rotateY(${i * 45}deg) translateZ(var(--ring-radius, 440px))` }}
             >
-              <Image src={p.src} alt={p.alt} fill sizes="260px" className="scale-[1.12] object-cover" />
+              <Image
+                src={p.src}
+                alt={p.alt}
+                fill
+                sizes="260px"
+                quality={92}
+                priority={i < 3}
+                className="scale-[1.12] object-cover"
+              />
             </div>
           ))}
         </div>

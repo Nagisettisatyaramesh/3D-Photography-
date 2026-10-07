@@ -21,7 +21,7 @@ export function ChapterCube() {
         <div className="cube3d relative h-[240px] w-[240px] [--cube-half:120px] md:h-[320px] md:w-[320px] md:[--cube-half:160px]">
           {faces.map((f) => (
             <div key={f.key} className="absolute inset-0 overflow-hidden rounded-sm" style={{ transform: f.transform }}>
-              <Image src={brand[f.key]} alt={f.label} fill sizes="320px" className="scale-[1.15] object-cover" />
+              <Image src={brand[f.key]} alt={f.label} fill sizes="320px" className="object-cover object-top" />
               <p className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-4 pb-4 pt-10 font-serif text-2xl italic">
                 {f.label}
               </p>
