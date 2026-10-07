@@ -29,13 +29,12 @@ const nextConfig: NextConfig = {
         hostname: "i.ytimg.com",
       },
     ],
-    // The LOCAL dev sandbox's network intercepts HTTPS with a cert Node's
-    // fetch won't trust, which breaks the built-in image optimizer's
-    // server-side fetch to Unsplash. Scoped to development only — on Vercel
-    // this doesn't apply, and leaving it on there was unintentionally
-    // shipping every photo (brand + Unsplash) at full original file size
-    // instead of resized/compressed, which is why pages felt slow to load.
-    unoptimized: process.env.NODE_ENV === "development",
+    // The dev sandbox's network intercepts HTTPS with a cert Node's fetch
+    // won't trust, which breaks the built-in image optimizer's server-side
+    // fetch to Unsplash. Serving these remote placeholder images unoptimized
+    // (browser loads them directly) sidesteps that; swap for real
+    // studio-hosted media in Phase 3 and this can be removed.
+    unoptimized: true,
   },
 };
 

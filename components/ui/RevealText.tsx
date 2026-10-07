@@ -37,7 +37,7 @@ export function RevealText({
   return (
     <Tag className={className}>
       {lines.map((text, i) => (
-        <span key={i} className="block overflow-hidden pb-[0.14em] -mb-[0.14em]">
+        <span key={i} className="block overflow-hidden">
           <motion.span
             className={lineClassName ?? "block"}
             custom={i}
