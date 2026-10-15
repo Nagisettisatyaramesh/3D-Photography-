@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition, type FormEvent } from "react";
+import { useState, useSyncExternalStore, useTransition, type FormEvent } from "react";
 import Image from "next/image";
 import { getYouTubeId } from "@/lib/youtube";
 
@@ -16,15 +16,20 @@ type FilmData = {
   published: boolean;
 };
 
-type FilmAction = (formData: FormData) => Promise<{ error?: string } | void>;
+const noopSubscribe = () => () => {};
+
+type FilmAction =(formData: FormData) => Promise<{ error?: string } | void>;
 
 export function FilmForm({ action, item }: { action: FilmAction; item?: FilmData }) {
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   // Submitting is handled in JS; keep the button off until hydration so an
   // early click can't fall through to a native form submit.
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => setHydrated(true), []);
+  const hydrated = useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false
+  );
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
