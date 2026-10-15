@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import type { LiveFilm } from "@/lib/content/liveFilms";
+import { getYouTubeId } from "@/lib/youtube";
 
 type FilmModalProps = {
   film: LiveFilm | null;
@@ -10,8 +11,8 @@ type FilmModalProps = {
 };
 
 function toEmbedUrl(url: string): string | null {
-  const youtube = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]+)/);
-  if (youtube) return `https://www.youtube.com/embed/${youtube[1]}?autoplay=1`;
+  const youtubeId = getYouTubeId(url);
+  if (youtubeId) return `https://www.youtube.com/embed/${youtubeId}?autoplay=1`;
 
   const vimeo = url.match(/vimeo\.com\/(\d+)/);
   if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}?autoplay=1`;
