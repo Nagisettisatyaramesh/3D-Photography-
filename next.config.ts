@@ -10,6 +10,15 @@ if (process.env.NODE_ENV === "development") {
 }
 
 const nextConfig: NextConfig = {
+  // Admin image uploads (portfolio, films, services, testimonials, hero)
+  // post the files through Server Actions, which reject bodies over 1MB by
+  // default — smaller than almost any real photo. 4mb stays under Vercel's
+  // 4.5MB request-body cap for serverless functions.
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "4mb",
+    },
+  },
   // The quotation PDF route reads font files and the studio's portfolio PDF
   // template from lib/pdf/ via fs at render time — Next's file tracer can't
   // statically see those `path.join`-built paths, so on Vercel's serverless
