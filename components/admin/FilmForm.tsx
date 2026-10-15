@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useState, useTransition, type FormEvent } from "react";
 import Image from "next/image";
+import { getYouTubeId } from "@/lib/youtube";
 
 type FilmData = {
   id?: string;
@@ -14,9 +16,42 @@ type FilmData = {
   published: boolean;
 };
 
-export function FilmForm({ action, item }: { action: (formData: FormData) => void; item?: FilmData }) {
+type FilmAction = (formData: FormData) => Promise<{ error?: string } | void>;
+
+export function FilmForm({ action, item }: { action: FilmAction; item?: FilmData }) {
+  const [error, setError] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
+  // Submitting is handled in JS; keep the button off until hydration so an
+  // early click can't fall through to a native form submit.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const videoUrl = String(formData.get("video_url") || "").trim();
+    const thumb = formData.get("thumbnail") as File | null;
+    const hasThumb = Boolean(thumb && thumb.size > 0);
+
+    if (!item && !hasThumb && !getYouTubeId(videoUrl)) {
+      setError("Upload a thumbnail image — it's only optional for YouTube links.");
+      return;
+    }
+
+    setError(null);
+    startTransition(async () => {
+      try {
+        // On success the action redirects back to the film list.
+        const result = await action(formData);
+        if (result?.error) setError(result.error);
+      } catch {
+        setError("Couldn't save the film. If you attached a thumbnail, try a smaller image.");
+      }
+    });
+  }
+
   return (
-    <form action={action} className="flex max-w-xl flex-col gap-6">
+    <form onSubmit={handleSubmit} method="post" className="flex max-w-xl flex-col gap-6">
       <Field label="Title *">
         <input name="title" required defaultValue={item?.title} className={inputClass} />
       </Field>
@@ -29,13 +64,13 @@ export function FilmForm({ action, item }: { action: (formData: FormData) => voi
       <Field label="Video URL (YouTube, Vimeo, or direct .mp4) *">
         <input name="video_url" required defaultValue={item?.video_url} className={inputClass} />
       </Field>
-      <Field label={item ? "Replace Thumbnail" : "Thumbnail *"}>
+      <Field label={item ? "Replace Thumbnail" : "Thumbnail (optional for YouTube — uses the video's own)"}>
         {item?.thumbnail_url && (
           <div className="relative mb-2 h-24 w-32 overflow-hidden border border-ink/10">
             <Image src={item.thumbnail_url} alt="" fill className="object-cover" />
           </div>
         )}
-        <input type="file" name="thumbnail" accept="image/*" required={!item} className={inputClass} />
+        <input type="file" name="thumbnail" accept="image/*" className={inputClass} />
       </Field>
       <div className="grid grid-cols-2 gap-4">
         <Field label="Display Order">
@@ -52,11 +87,17 @@ export function FilmForm({ action, item }: { action: (formData: FormData) => voi
           </label>
         </div>
       </div>
+      {error && (
+        <p role="alert" className="border border-terracotta/40 bg-terracotta/10 px-4 py-3 text-sm text-terracotta">
+          {error}
+        </p>
+      )}
       <button
         type="submit"
-        className="mt-2 w-fit rounded-full bg-ink px-6 py-3 text-xs uppercase tracking-[0.2em] text-parchment hover:bg-black"
+        disabled={!hydrated || pending}
+        className="mt-2 w-fit rounded-full bg-ink px-6 py-3 text-xs uppercase tracking-[0.2em] text-parchment hover:bg-black disabled:opacity-50"
       >
-        {item ? "Save Changes" : "Add Film"}
+        {pending ? "Saving…" : item ? "Save Changes" : "Add Film"}
       </button>
     </form>
   );
