@@ -44,9 +44,9 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: settings.studioName,
       title: `${settings.studioName} — ${settings.tagline}`,
       description,
-      images: [{ url: "/brand/wedding-ceremony-2.jpg", alt: `${settings.studioName} wedding photography` }],
+      images: [{ url: "/brand/share-logo.png", width: 1200, height: 630, alt: `${settings.studioName} logo` }],
     },
-    twitter: { card: "summary_large_image" },
+    twitter: { card: "summary_large_image", images: ["/brand/share-logo.png"] },
   };
 }
 
