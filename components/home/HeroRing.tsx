@@ -62,7 +62,8 @@ export function HeroRing() {
                 // the matching note in Coverflow.tsx.
                 sizes="(max-width: 768px) 360px, 520px"
                 quality={92}
-                priority={i < 3}
+                loading={i < 3 ? "eager" : undefined}
+                fetchPriority={i < 3 ? "high" : undefined}
                 className="scale-[1.12] object-cover"
               />
             </div>

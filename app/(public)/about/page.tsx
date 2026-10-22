@@ -23,7 +23,8 @@ export default function AboutPage() {
             src={brand.halfSaree2}
             alt="Traditional function decor"
             fill
-            priority
+            loading="eager"
+            fetchPriority="high"
             className="object-cover"
             sizes="100vw"
           />
