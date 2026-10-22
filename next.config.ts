@@ -37,6 +37,15 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "i.ytimg.com",
       },
+      // Images uploaded from the admin panel (film thumbnails, portfolio,
+      // etc.) live in the project's public Supabase storage bucket. Without
+      // this entry the optimizer rejects them with a 400 on Vercel — the
+      // dev sandbox runs with `unoptimized`, so it never shows there.
+      {
+        protocol: "https",
+        hostname: "mdrbperjsgdgfwovinhf.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      },
     ],
     // The LOCAL dev sandbox's network intercepts HTTPS with a cert Node's
     // fetch won't trust, which breaks the built-in image optimizer's
