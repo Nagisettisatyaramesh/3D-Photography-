@@ -56,7 +56,8 @@ export function Coverflow() {
               // once foreshortened. The extra source pixels survive that warp.
               sizes="(max-width: 768px) 420px, 560px"
               quality={92}
-              priority={i < 3}
+              loading={i < 3 ? "eager" : undefined}
+              fetchPriority={i < 3 ? "high" : undefined}
               className="scale-110 object-cover"
             />
           </div>

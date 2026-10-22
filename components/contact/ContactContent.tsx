@@ -37,7 +37,8 @@ export function ContactContent({ settings }: { settings: LiveSettings }) {
             src={brand.makeoverBrideCloseup}
             alt="Bridal jewelry and styling detail"
             fill
-            priority
+            loading="eager"
+            fetchPriority="high"
             className="object-cover"
             sizes="100vw"
           />
