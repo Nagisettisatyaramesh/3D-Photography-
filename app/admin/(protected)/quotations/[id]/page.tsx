@@ -8,10 +8,11 @@ import { SendQuotationButton } from "@/components/admin/SendQuotationButton";
 import { DeleteButton } from "@/components/admin/DeleteButton";
 import { deleteQuotation } from "@/app/admin/actions/quotations";
 import { computeQuotationTotals } from "@/lib/pdf/QuotationDocument";
-import { isResendConfigured } from "@/lib/email/resend";
+import { isSmtpConfigured } from "@/lib/email/smtp";
 
 export default async function QuotationBuilderPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const canSendEmail = isSmtpConfigured();
   const supabase = getSupabaseAdminClient();
 
   const { data: quotation } = supabase
@@ -55,15 +56,15 @@ export default async function QuotationBuilderPage({ params }: { params: Promise
           >
             Preview PDF
           </Link>
-          <SendQuotationButton quotationId={id} disabled={!isResendConfigured} />
+          <SendQuotationButton quotationId={id} customerEmail={quotation.email} disabled={!canSendEmail} />
         </div>
       </div>
 
-      {!isResendConfigured && (
+      {!canSendEmail && (
         <p className="mb-8 border border-terracotta/40 bg-blush/40 px-4 py-3 text-sm text-ink/70">
-          Email sending isn&apos;t configured yet. Add <code>RESEND_API_KEY</code> and{" "}
-          <code>RESEND_FROM_EMAIL</code> to your environment to enable sending — you can still preview and download
-          the PDF above.
+          Email sending isn&apos;t configured yet. Add <code>SMTP_HOST</code>, <code>EMAIL_USER</code> and{" "}
+          <code>EMAIL_PASS</code> to your environment to enable sending — you can still preview and download the PDF
+          above.
         </p>
       )}
 

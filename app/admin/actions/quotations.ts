@@ -3,7 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSupabaseAdminClient } from "@/lib/supabase/adminClient";
-import { isResendConfigured, sendQuotationPdfEmail } from "@/lib/email/resend";
+import { sendQuotationPdfEmail } from "@/lib/email/quotationEmail";
+import { isSmtpConfigured } from "@/lib/email/smtp";
 import { renderQuotationPdf } from "@/lib/pdf/renderQuotationPdf";
 import type { QuotationData } from "@/lib/pdf/QuotationDocument";
 
@@ -179,8 +180,8 @@ async function loadQuotationData(quotationId: string): Promise<QuotationData | n
 }
 
 export async function sendQuotationEmail(quotationId: string) {
-  if (!isResendConfigured) {
-    return { error: "Email sending isn't configured yet. Add RESEND_API_KEY and RESEND_FROM_EMAIL to send quotations." };
+  if (!isSmtpConfigured()) {
+    return { error: "Email sending isn't configured yet. Add SMTP_HOST, EMAIL_USER and EMAIL_PASS to send quotations." };
   }
 
   const supabase = getSupabaseAdminClient();
@@ -200,7 +201,8 @@ export async function sendQuotationEmail(quotationId: string) {
       pdfBuffer,
     });
   } catch (err) {
-    return { error: err instanceof Error ? err.message : "Failed to send email." };
+    console.error("Failed to send quotation email.", err);
+    return { error: err instanceof Error ? `The email could not be sent: ${err.message}` : "The email could not be sent." };
   }
 
   const { error } = await supabase
