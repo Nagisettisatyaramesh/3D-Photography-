@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
-import { brand, type BrandImageKey } from "@/lib/content/brandImages";
+import { useSiteImages } from "@/components/providers/SiteImagesProvider";
+import type { SiteImageKey } from "@/lib/content/siteImages";
 import { driftUp, viewportOnce } from "@/lib/motion";
 import { FloatingButton } from "@/components/ui/FloatingButton";
 
@@ -11,17 +12,18 @@ import { FloatingButton } from "@/components/ui/FloatingButton";
 // saree, ceremony, pre-wedding, makeover, child makeover) rather than
 // repeating a category back-to-back; centre frame faces front, the rest
 // fan back toward the edges; hover pulls any frame forward.
-const cards: [BrandImageKey, string, number, number][] = [
-  ["weddingBrideOrange", "Wedding Day", 44, -120],
-  ["preWedding2", "Pre-Wedding", 32, -70],
-  ["halfSaree1", "Half Saree", 18, -30],
-  ["weddingCeremony3", "Wedding Day", 0, 30],
-  ["preWedding1", "Pre-Wedding", -18, -30],
-  ["makeoverGroomDark", "Makeover", -32, -70],
-  ["childMakeover2", "Child Makeover", -44, -120],
+const cards: [SiteImageKey, string, number, number][] = [
+  ["gallery-1", "Wedding Day", 44, -120],
+  ["gallery-2", "Pre-Wedding", 32, -70],
+  ["gallery-3", "Half Saree", 18, -30],
+  ["gallery-4", "Wedding Day", 0, 30],
+  ["gallery-5", "Pre-Wedding", -18, -30],
+  ["gallery-6", "Makeover", -32, -70],
+  ["gallery-7", "Child Makeover", -44, -120],
 ];
 
 export function Coverflow() {
+  const image = useSiteImages();
   return (
     <section className="overflow-hidden py-28 md:py-40">
       <div className="mb-10 flex flex-wrap items-end justify-between gap-6 px-6 md:px-12">
@@ -46,7 +48,7 @@ export function Coverflow() {
             }}
           >
             <Image
-              src={brand[key]}
+              src={image(key)}
               alt={caption}
               fill
               // Requested well above the frame's CSS size (190/270px): these

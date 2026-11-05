@@ -11,6 +11,7 @@ const navItems = [
   { label: "Services & Pricing", href: "/admin/services" },
   { label: "Testimonials", href: "/admin/testimonials" },
   { label: "Availability", href: "/admin/availability" },
+  { label: "Site Images", href: "/admin/site-images" },
   { label: "Website Settings", href: "/admin/settings" },
 ];
 

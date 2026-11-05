@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import Image from "next/image";
 import { updateWebsiteSettings } from "@/app/admin/actions/settings";
 
 type Settings = {
@@ -13,7 +12,6 @@ type Settings = {
   address: string | null;
   instagram: string | null;
   youtube: string | null;
-  hero_image_url: string | null;
 };
 
 export function SettingsForm({ settings }: { settings: Settings }) {
@@ -55,15 +53,6 @@ export function SettingsForm({ settings }: { settings: Settings }) {
       </Field>
       <Field label="YouTube URL">
         <input name="youtube" defaultValue={settings.youtube ?? ""} className={inputClass} />
-      </Field>
-      <Field label="Homepage Hero Image">
-        {settings.hero_image_url && (
-          <div className="relative mb-2 h-24 w-40 overflow-hidden border border-ink/10">
-            <Image src={settings.hero_image_url} alt="" fill className="object-cover" />
-          </div>
-        )}
-        <input type="file" name="hero_image" accept="image/*" className={inputClass} />
-        <p className="mt-1 text-xs text-ink/40">Leave blank to keep the current hero photo.</p>
       </Field>
 
       {message && <p className="text-sm text-terracotta">{message}</p>}

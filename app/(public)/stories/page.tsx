@@ -3,21 +3,22 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useSpring, useTransform } from "motion/react";
-import { brand, type BrandImageKey } from "@/lib/content/brandImages";
+import { useSiteImages } from "@/components/providers/SiteImagesProvider";
+import type { SiteImageKey } from "@/lib/content/siteImages";
 import { categoryCopy, type PortfolioCategory } from "@/lib/content/portfolio";
 import { driftUp, viewportOnce } from "@/lib/motion";
 import { RevealText } from "@/components/ui/RevealText";
 import { FloatingButton } from "@/components/ui/FloatingButton";
 import { Tilt3D } from "@/components/ui/Tilt3D";
 
-const journey: { category: PortfolioCategory; image: BrandImageKey }[] = [
-  { category: "Pre-Wedding", image: "preWedding2" },
-  { category: "Groom's Haldi", image: "groomHaldi1" },
-  { category: "Bride's Haldi", image: "brideHaldi2" },
-  { category: "Makeover", image: "makeoverGroomDark" },
-  { category: "Wedding Day", image: "weddingCeremony2" },
-  { category: "Half Saree", image: "halfSaree2" },
-  { category: "Child Makeover", image: "childMakeover2" },
+const journey: { category: PortfolioCategory; image: SiteImageKey }[] = [
+  { category: "Pre-Wedding", image: "story-pre-wedding" },
+  { category: "Groom's Haldi", image: "story-groom-haldi" },
+  { category: "Bride's Haldi", image: "story-bride-haldi" },
+  { category: "Makeover", image: "story-makeover" },
+  { category: "Wedding Day", image: "story-wedding-day" },
+  { category: "Half Saree", image: "story-half-saree" },
+  { category: "Child Makeover", image: "story-child-makeover" },
 ];
 
 function Chapter({ step, index }: { step: (typeof journey)[number]; index: number }) {
@@ -26,7 +27,8 @@ function Chapter({ step, index }: { step: (typeof journey)[number]; index: numbe
   const imageY = useTransform(scrollYProgress, [0, 1], [50, -50]);
   const numberX = useTransform(scrollYProgress, [0, 1], [index % 2 ? 80 : -80, index % 2 ? -80 : 80]);
   const flip = index % 2 === 1;
-  const src = brand[step.image];
+  const image = useSiteImages();
+  const src = image(step.image);
 
   return (
     <section
@@ -105,6 +107,7 @@ function Chapter({ step, index }: { step: (typeof journey)[number]; index: numbe
 }
 
 export default function StoriesPage() {
+  const image = useSiteImages();
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
 
@@ -119,7 +122,7 @@ export default function StoriesPage() {
           transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
           className="absolute inset-0"
         >
-          <Image src={brand.childMehndi} alt="Mehndi and bangles detail" fill loading="eager" fetchPriority="high" className="object-cover" sizes="100vw" />
+          <Image src={image("cover-stories")} alt="Mehndi and bangles detail" fill loading="eager" fetchPriority="high" className="object-cover" sizes="100vw" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/30" />
         </motion.div>
         <div className="relative z-10 px-6 pb-16 text-parchment md:px-12 md:pb-24">

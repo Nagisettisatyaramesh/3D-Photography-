@@ -2,23 +2,25 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
-import { brand, type BrandImageKey } from "@/lib/content/brandImages";
+import { useSiteImages } from "@/components/providers/SiteImagesProvider";
+import type { SiteImageKey } from "@/lib/content/siteImages";
 import { siteConfig } from "@/lib/content/siteConfig";
 import { driftUp, staggerFloat, viewportOnce } from "@/lib/motion";
 import { FloatingButton } from "@/components/ui/FloatingButton";
 
-const tiles: { image: BrandImageKey; alt: string }[] = [
-  { image: "preWedding1", alt: "Pre-wedding portrait" },
-  { image: "weddingCeremony1", alt: "Wedding ceremony moment" },
-  { image: "halfSaree1", alt: "Half saree function" },
-  { image: "weddingBrideOrange", alt: "Bride portrait" },
-  { image: "childMakeover2", alt: "Child makeover portrait" },
-  { image: "preWedding3", alt: "Pre-wedding couple portrait" },
+const tiles: { image: SiteImageKey; alt: string }[] = [
+  { image: "instagram-1", alt: "Pre-wedding portrait" },
+  { image: "instagram-2", alt: "Wedding ceremony moment" },
+  { image: "instagram-3", alt: "Half saree function" },
+  { image: "instagram-4", alt: "Bride portrait" },
+  { image: "instagram-5", alt: "Child makeover portrait" },
+  { image: "instagram-6", alt: "Pre-wedding couple portrait" },
 ];
 
 const handle = siteConfig.instagram.replace(/^https?:\/\/(www\.)?instagram\.com\//, "@").replace(/\/$/, "");
 
 export function InstagramFeed() {
+  const image = useSiteImages();
   return (
     <section className="px-6 py-24 md:px-12 md:py-32">
       <motion.div
@@ -49,7 +51,7 @@ export function InstagramFeed() {
             className="group relative aspect-square overflow-hidden"
           >
             <Image
-              src={brand[tile.image]}
+              src={image(tile.image)}
               alt={tile.alt}
               fill
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
