@@ -1,14 +1,6 @@
-import { Resend } from "resend";
+import "server-only";
 
-const apiKey = process.env.RESEND_API_KEY;
-const fromEmail = process.env.RESEND_FROM_EMAIL;
-
-export const isResendConfigured = Boolean(apiKey && fromEmail);
-
-function getClient() {
-  if (!apiKey) return null;
-  return new Resend(apiKey);
-}
+import { createSmtpSender, escapeHtml } from "./smtp";
 
 export async function sendQuotationPdfEmail({
   to,
@@ -21,16 +13,24 @@ export async function sendQuotationPdfEmail({
   quotationNumber: string;
   pdfBuffer: Buffer;
 }) {
-  const client = getClient();
-  if (!client || !fromEmail) throw new Error("Resend is not configured.");
+  const sender = createSmtpSender();
+  if (!sender) throw new Error("Email sending isn't configured yet.");
 
-  const { error } = await client.emails.send({
-    from: fromEmail,
+  const name = escapeHtml(customerName);
+
+  await sender.transporter.sendMail({
+    from: sender.from,
     to,
     subject: `Your Wedding Proposal from Unique Creations — ${quotationNumber}`,
+    text: [
+      `Dear ${customerName},`,
+      "Thank you for considering Unique Creations for your celebration. Please find your personalised proposal attached, including your investment details on the final page.",
+      "We're happy to answer any questions or make adjustments — just reply to this email.",
+      "Warmly,\nUnique Creations",
+    ].join("\n\n"),
     html: `
       <div style="font-family: Georgia, serif; color: #2b241e; max-width: 560px; margin: 0 auto;">
-        <p style="font-size: 15px;">Dear ${customerName},</p>
+        <p style="font-size: 15px;">Dear ${name},</p>
         <p style="font-size: 15px; line-height: 1.6;">
           Thank you for considering Unique Creations for your celebration. Please find your personalised
           proposal attached, including your investment details on the final page.
@@ -45,9 +45,8 @@ export async function sendQuotationPdfEmail({
       {
         filename: `${quotationNumber}-Unique-Creations.pdf`,
         content: pdfBuffer,
+        contentType: "application/pdf",
       },
     ],
   });
-
-  if (error) throw new Error(error.message);
 }

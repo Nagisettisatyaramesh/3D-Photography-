@@ -3,12 +3,24 @@
 import { useState, useTransition } from "react";
 import { sendQuotationEmail } from "@/app/admin/actions/quotations";
 
-export function SendQuotationButton({ quotationId, disabled }: { quotationId: string; disabled?: boolean }) {
+export function SendQuotationButton({
+  quotationId,
+  customerEmail,
+  disabled,
+}: {
+  quotationId: string;
+  customerEmail: string | null;
+  disabled?: boolean;
+}) {
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState<string | null>(null);
 
   function handleClick() {
-    if (!window.confirm("Send this quotation PDF to the customer's email now?")) return;
+    if (!customerEmail) {
+      setMessage("Add the customer's email under Event & Customer Details, save, then send.");
+      return;
+    }
+    if (!window.confirm(`Send this quotation PDF to ${customerEmail} now?`)) return;
     setMessage(null);
     startTransition(async () => {
       const result = await sendQuotationEmail(quotationId);
