@@ -20,8 +20,8 @@ export default function AboutPage() {
           className="absolute inset-0"
         >
           <Image
-            src={brand.halfSaree2}
-            alt="Traditional function decor"
+            src={brand.coverAbout}
+            alt="Bride seated on a decorated stage"
             fill
             loading="eager"
             fetchPriority="high"

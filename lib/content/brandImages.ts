@@ -5,6 +5,56 @@
  * admin Image Library (Phase B) without touching component code.
  */
 export const brand = {
+  heroRing1: "/brand/hero-ring-1.jpg",
+  heroRing2: "/brand/hero-ring-2.jpg",
+  heroRing3: "/brand/hero-ring-3.jpg",
+  heroRing4: "/brand/hero-ring-4.jpg",
+  heroRing5: "/brand/hero-ring-5.jpg",
+  heroRing6: "/brand/hero-ring-6.jpg",
+  heroRing7: "/brand/hero-ring-7.jpg",
+  heroRing8: "/brand/hero-ring-8.jpg",
+
+  ourBelief1: "/brand/our-belief-1.jpg",
+  ourBelief2: "/brand/our-belief-2.jpg",
+  ourBelief3: "/brand/our-belief-3.jpg",
+  ourBelief4: "/brand/our-belief-4.jpg",
+
+  featuredStoryLarge: "/brand/featured-story-large.jpg",
+  featuredStorySmall: "/brand/featured-story-small.jpg",
+
+  galleryDepth1: "/brand/gallery-depth-1.jpg",
+  galleryDepth2: "/brand/gallery-depth-2.jpg",
+  galleryDepth3: "/brand/gallery-depth-3.jpg",
+  galleryDepth4: "/brand/gallery-depth-4.jpg",
+  galleryDepth5: "/brand/gallery-depth-5.jpg",
+  galleryDepth6: "/brand/gallery-depth-6.jpg",
+  galleryDepth7: "/brand/gallery-depth-7.jpg",
+  galleryDepth8: "/brand/gallery-depth-8.jpg",
+
+  instagram1: "/brand/instagram-1.jpg",
+  instagram2: "/brand/instagram-2.jpg",
+  instagram3: "/brand/instagram-3.jpg",
+  instagram4: "/brand/instagram-4.jpg",
+  instagram5: "/brand/instagram-5.jpg",
+  instagram6: "/brand/instagram-6.jpg",
+
+  storiesPreWedding: "/brand/stories-pre-wedding.jpg",
+  storiesGroomHaldi: "/brand/stories-groom-haldi.jpg",
+  storiesBrideHaldi: "/brand/stories-bride-haldi.jpg",
+  storiesMakeover: "/brand/stories-makeover.jpg",
+  storiesWeddingDay: "/brand/stories-wedding-day.jpg",
+  storiesHalfSaree: "/brand/stories-half-saree.jpg",
+  storiesChildMakeover: "/brand/stories-child-makeover.jpg",
+
+  coverAbout: "/brand/cover-about.jpg",
+  coverPhotography: "/brand/cover-photography.jpg",
+  coverServices: "/brand/cover-services.jpg",
+  coverStories: "/brand/cover-stories.jpg",
+  coverContact: "/brand/cover-contact.jpg",
+
+  backgroundPricing: "/brand/background-pricing.jpg",
+  backgroundQuote: "/brand/background-quote.jpg",
+
   preWedding1: "/brand/pre-wedding-1.jpg",
   preWedding2: "/brand/pre-wedding-2.jpg",
   preWedding3: "/brand/pre-wedding-3.jpg",

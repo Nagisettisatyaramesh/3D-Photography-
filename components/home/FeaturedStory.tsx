@@ -47,8 +47,8 @@ export function FeaturedStory() {
             className="absolute right-0 top-0 h-[75%] w-[72%] overflow-hidden"
           >
             <Image
-              src={brand.weddingCeremony2}
-              alt="Groom seated during the wedding ceremony"
+              src={brand.featuredStoryLarge}
+              alt="Couple at their wedding, in black and white"
               fill
               className="object-cover"
               sizes="(min-width: 768px) 36vw, 80vw"
@@ -66,8 +66,8 @@ export function FeaturedStory() {
             className="absolute bottom-0 left-0 h-[55%] w-[52%] overflow-hidden border-4 border-parchment shadow-[0_30px_70px_-25px_rgba(20,17,16,0.45)]"
           >
             <Image
-              src={brand.weddingBridePlate}
-              alt="Bride holding a traditional ritual object"
+              src={brand.featuredStorySmall}
+              alt="Bride during a wedding ritual, in black and white"
               fill
               className="object-cover"
               sizes="(min-width: 768px) 26vw, 60vw"

@@ -6,14 +6,14 @@ import { motion, useMotionValue, useSpring } from "motion/react";
 import { brand } from "@/lib/content/brandImages";
 
 const panels = [
-  { src: brand.weddingCeremony2, alt: "Groom at a Telugu wedding ceremony" },
-  { src: brand.preWedding2, alt: "Couple running through the surf" },
-  { src: brand.halfSaree2, alt: "Half saree on a flower-decked stage" },
-  { src: brand.weddingBridePlate, alt: "Bride portrait" },
-  { src: brand.childMehndi, alt: "Mehndi and bangles" },
-  { src: brand.preWedding3, alt: "Pre-wedding couple" },
-  { src: brand.weddingGroomPink, alt: "Groom portrait" },
-  { src: brand.weddingBrideOrange, alt: "Bride in orange" },
+  { src: brand.heroRing1, alt: "Couple in a close embrace" },
+  { src: brand.heroRing2, alt: "Couple smiling together in festive outfits" },
+  { src: brand.heroRing3, alt: "Couple laughing over cups of tea" },
+  { src: brand.heroRing4, alt: "Couple in traditional silk attire" },
+  { src: brand.heroRing5, alt: "Couple seated on a decorated stage" },
+  { src: brand.heroRing6, alt: "Couple in a studio portrait" },
+  { src: brand.heroRing7, alt: "Bride seated during a ceremony" },
+  { src: brand.heroRing8, alt: "Smiling bride in traditional jewellery" },
 ];
 
 /** Photos arranged on a slowly turning 3D cylinder; the whole scene tilts

@@ -11,13 +11,13 @@ import { FloatingButton } from "@/components/ui/FloatingButton";
 import { Tilt3D } from "@/components/ui/Tilt3D";
 
 const journey: { category: PortfolioCategory; image: BrandImageKey }[] = [
-  { category: "Pre-Wedding", image: "preWedding2" },
-  { category: "Groom's Haldi", image: "groomHaldi1" },
-  { category: "Bride's Haldi", image: "brideHaldi2" },
-  { category: "Makeover", image: "makeoverGroomDark" },
-  { category: "Wedding Day", image: "weddingCeremony2" },
-  { category: "Half Saree", image: "halfSaree2" },
-  { category: "Child Makeover", image: "childMakeover2" },
+  { category: "Pre-Wedding", image: "storiesPreWedding" },
+  { category: "Groom's Haldi", image: "storiesGroomHaldi" },
+  { category: "Bride's Haldi", image: "storiesBrideHaldi" },
+  { category: "Makeover", image: "storiesMakeover" },
+  { category: "Wedding Day", image: "storiesWeddingDay" },
+  { category: "Half Saree", image: "storiesHalfSaree" },
+  { category: "Child Makeover", image: "storiesChildMakeover" },
 ];
 
 function Chapter({ step, index }: { step: (typeof journey)[number]; index: number }) {
@@ -119,7 +119,16 @@ export default function StoriesPage() {
           transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
           className="absolute inset-0"
         >
-          <Image src={brand.childMehndi} alt="Mehndi and bangles detail" fill loading="eager" fetchPriority="high" className="object-cover" sizes="100vw" />
+          <Image
+            src={brand.coverStories}
+            alt="Family gathered at a celebration"
+            fill
+            loading="eager"
+            fetchPriority="high"
+            className="object-cover"
+            style={{ objectPosition: "50% 30%" }}
+            sizes="100vw"
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/30" />
         </motion.div>
         <div className="relative z-10 px-6 pb-16 text-parchment md:px-12 md:pb-24">

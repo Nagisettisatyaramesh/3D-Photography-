@@ -34,12 +34,14 @@ export function ContactContent({ settings }: { settings: LiveSettings }) {
       <section className="relative flex h-[55svh] min-h-[420px] w-full items-end overflow-hidden bg-black">
         <motion.div variants={expandReveal} initial="hidden" animate="visible" className="absolute inset-0">
           <Image
-            src={brand.makeoverBrideCloseup}
-            alt="Bridal jewelry and styling detail"
+            src={brand.coverContact}
+            alt="Guests walking together at a celebration"
             fill
             loading="eager"
             fetchPriority="high"
             className="object-cover"
+            // The faces are near the top of this photo.
+            style={{ objectPosition: "50% 0%" }}
             sizes="100vw"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/30" />
