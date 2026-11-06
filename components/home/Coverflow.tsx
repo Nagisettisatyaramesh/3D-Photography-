@@ -7,18 +7,17 @@ import { driftUp, viewportOnce } from "@/lib/motion";
 import { FloatingButton } from "@/components/ui/FloatingButton";
 
 // [image, caption, rotateY deg, translateZ px] — one slot per stack
-// position, ordered to move through the categories (bride, beach, half
-// saree, ceremony, pre-wedding, makeover, child makeover) rather than
-// repeating a category back-to-back; centre frame faces front, the rest
-// fan back toward the edges; hover pulls any frame forward.
+// position. The two middle frames face almost front and the rest fan back
+// toward the edges; hover pulls any frame forward.
 const cards: [BrandImageKey, string, number, number][] = [
-  ["weddingBrideOrange", "Wedding Day", 44, -120],
-  ["preWedding2", "Pre-Wedding", 32, -70],
-  ["halfSaree1", "Half Saree", 18, -30],
-  ["weddingCeremony3", "Wedding Day", 0, 30],
-  ["preWedding1", "Pre-Wedding", -18, -30],
-  ["makeoverGroomDark", "Makeover", -32, -70],
-  ["childMakeover2", "Child Makeover", -44, -120],
+  ["galleryDepth1", "Bridal portrait", 46, -120],
+  ["galleryDepth2", "Half saree portrait", 34, -75],
+  ["galleryDepth3", "Ceremony blessing", 21, -35],
+  ["galleryDepth4", "Pre-wedding on the beach", 7, 20],
+  ["galleryDepth5", "Couple in traditional attire", -7, 20],
+  ["galleryDepth6", "Fireworks at a celebration", -21, -35],
+  ["galleryDepth7", "Half saree function", -34, -75],
+  ["galleryDepth8", "Couple portrait", -46, -120],
 ];
 
 export function Coverflow() {
@@ -40,8 +39,8 @@ export function Coverflow() {
             key={key}
             className="cf3d relative h-[300px] w-[190px] shrink-0 overflow-hidden rounded-md shadow-[0_40px_70px_rgba(20,17,16,0.5)] md:h-[400px] md:w-[270px]"
             style={{
-              marginLeft: i ? -64 : 0,
-              zIndex: 10 - Math.abs(3 - i),
+              marginLeft: i ? -92 : 0,
+              zIndex: 10 - Math.floor(Math.abs(3.5 - i)),
               transform: `rotateY(${rot}deg) translateZ(${z}px)`,
             }}
           >

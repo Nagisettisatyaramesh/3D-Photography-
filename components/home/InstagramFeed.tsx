@@ -8,12 +8,12 @@ import { driftUp, staggerFloat, viewportOnce } from "@/lib/motion";
 import { FloatingButton } from "@/components/ui/FloatingButton";
 
 const tiles: { image: BrandImageKey; alt: string }[] = [
-  { image: "preWedding1", alt: "Pre-wedding portrait" },
-  { image: "weddingCeremony1", alt: "Wedding ceremony moment" },
-  { image: "halfSaree1", alt: "Half saree function" },
-  { image: "weddingBrideOrange", alt: "Bride portrait" },
-  { image: "childMakeover2", alt: "Child makeover portrait" },
-  { image: "preWedding3", alt: "Pre-wedding couple portrait" },
+  { image: "instagram1", alt: "Couple seated beside a floral rangoli" },
+  { image: "instagram2", alt: "Portrait in a pink silk saree" },
+  { image: "instagram3", alt: "Child portrait among flowers" },
+  { image: "instagram4", alt: "Close-up of a ring ceremony" },
+  { image: "instagram5", alt: "Couple sharing a cup of tea" },
+  { image: "instagram6", alt: "Water splash during a celebration" },
 ];
 
 const handle = siteConfig.instagram.replace(/^https?:\/\/(www\.)?instagram\.com\//, "@").replace(/\/$/, "");

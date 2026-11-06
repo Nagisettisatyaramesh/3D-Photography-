@@ -9,10 +9,10 @@ import { siteConfig } from "@/lib/content/siteConfig";
 // Each layer drifts by a different multiplier of the cursor offset, so the
 // photos read as sitting at different depths behind the statement.
 const layers: { key: BrandImageKey; pos: string; size: string; depth: number }[] = [
-  { key: "preWedding1", pos: "left-[4%] top-[14%]", size: "h-[230px] w-[170px] md:h-[400px] md:w-[300px]", depth: -28 },
-  { key: "weddingBrideOrange", pos: "right-[6%] top-[8%]", size: "h-[190px] w-[140px] md:h-[350px] md:w-[260px]", depth: 46 },
-  { key: "childMakeover2", pos: "right-[14%] bottom-[8%]", size: "h-[150px] w-[120px] md:h-[290px] md:w-[220px]", depth: -84 },
-  { key: "weddingGroomPink", pos: "left-[12%] bottom-[6%]", size: "h-[140px] w-[110px] md:h-[270px] md:w-[200px]", depth: -84 },
+  { key: "ourBelief1", pos: "left-[4%] top-[14%]", size: "h-[230px] w-[170px] md:h-[400px] md:w-[300px]", depth: -28 },
+  { key: "ourBelief2", pos: "right-[6%] top-[8%]", size: "h-[190px] w-[140px] md:h-[350px] md:w-[260px]", depth: 46 },
+  { key: "ourBelief3", pos: "right-[14%] bottom-[8%]", size: "h-[150px] w-[120px] md:h-[290px] md:w-[220px]", depth: -84 },
+  { key: "ourBelief4", pos: "left-[12%] bottom-[6%]", size: "h-[140px] w-[110px] md:h-[270px] md:w-[200px]", depth: -84 },
 ];
 
 function Layer({ item, mx, my }: { item: (typeof layers)[number]; mx: ReturnType<typeof useSpring>; my: ReturnType<typeof useSpring> }) {
