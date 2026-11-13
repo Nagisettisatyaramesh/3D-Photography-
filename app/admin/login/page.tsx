@@ -16,11 +16,6 @@ export default function AdminLoginPage() {
     setError(null);
 
     const supabase = getSupabaseBrowserClient();
-    if (!supabase) {
-      setError("Supabase isn't configured for this deployment.");
-      return;
-    }
-
     setLoading(true);
     const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);

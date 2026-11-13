@@ -2,12 +2,11 @@
 
 import { useState, useTransition } from "react";
 import { updateQuotationDetails } from "@/app/admin/actions/quotations";
+import { QuotationOutputsEditor, type QuotationOutputRow } from "@/components/admin/QuotationOutputsEditor";
 
 type Quotation = {
   id: string;
   customer_name: string | null;
-  bride_name: string | null;
-  groom_name: string | null;
   mobile: string | null;
   email: string | null;
   event_date: string | null;
@@ -17,6 +16,8 @@ type Quotation = {
   number_of_guests: number | null;
   intro_note: string | null;
   terms: string | null;
+  payment_schedule: string | null;
+  outputs: QuotationOutputRow[] | null;
   discount_type: string;
   discount_value: number;
   additional_charges: number;
@@ -39,17 +40,44 @@ export function QuotationDetailsForm({ quotation }: { quotation: Quotation }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-      <div className="grid grid-cols-2 gap-4">
-        <Field label="Bride's Name">
-          <input name="bride_name" defaultValue={quotation.bride_name ?? ""} className={inputClass} />
+    <form onSubmit={handleSubmit} className="mt-12 flex flex-col gap-6">
+      <QuotationOutputsEditor initialRows={quotation.outputs ?? []} />
+
+      <Field label="Payment Schedule">
+        <textarea
+          name="payment_schedule"
+          rows={5}
+          placeholder={"Advance - 35,000/-\nOn Engagement - 40,000/-\nOn Wedding - 1,70,000/-"}
+          defaultValue={quotation.payment_schedule ?? ""}
+          className={inputClass}
+        />
+      </Field>
+
+      <Field label="Terms & Notes">
+        <textarea name="terms" rows={3} defaultValue={quotation.terms ?? ""} className={inputClass} />
+      </Field>
+
+      <div className="grid grid-cols-4 gap-4">
+        <Field label="Discount Type">
+          <select name="discount_type" defaultValue={quotation.discount_type} className={inputClass}>
+            <option value="fixed">Fixed (₹)</option>
+            <option value="percent">Percent (%)</option>
+          </select>
         </Field>
-        <Field label="Groom's Name">
-          <input name="groom_name" defaultValue={quotation.groom_name ?? ""} className={inputClass} />
+        <Field label="Discount Value">
+          <input type="number" name="discount_value" defaultValue={quotation.discount_value} className={inputClass} />
+        </Field>
+        <Field label="Additional Charges (₹)">
+          <input type="number" name="additional_charges" defaultValue={quotation.additional_charges} className={inputClass} />
+        </Field>
+        <Field label="Tax (%)">
+          <input type="number" name="tax_percent" defaultValue={quotation.tax_percent} className={inputClass} />
         </Field>
       </div>
 
-      <Field label="Customer Name (if different from couple)">
+      <h2 className="mt-6 font-serif text-2xl italic">Event &amp; Customer Details</h2>
+
+      <Field label="Customer Name">
         <input name="customer_name" defaultValue={quotation.customer_name ?? ""} className={inputClass} />
       </Field>
 
@@ -66,7 +94,7 @@ export function QuotationDetailsForm({ quotation }: { quotation: Quotation }) {
         <Field label="Event Date">
           <input type="date" name="event_date" defaultValue={quotation.event_date ?? ""} className={inputClass} />
         </Field>
-        <Field label="Wedding / Event Type">
+        <Field label="Event Type">
           <input name="wedding_type" defaultValue={quotation.wedding_type ?? ""} className={inputClass} />
         </Field>
       </div>
@@ -93,28 +121,6 @@ export function QuotationDetailsForm({ quotation }: { quotation: Quotation }) {
           className={inputClass}
         />
       </Field>
-
-      <Field label="Terms & Notes">
-        <textarea name="terms" rows={3} defaultValue={quotation.terms ?? ""} className={inputClass} />
-      </Field>
-
-      <div className="grid grid-cols-4 gap-4">
-        <Field label="Discount Type">
-          <select name="discount_type" defaultValue={quotation.discount_type} className={inputClass}>
-            <option value="fixed">Fixed (₹)</option>
-            <option value="percent">Percent (%)</option>
-          </select>
-        </Field>
-        <Field label="Discount Value">
-          <input type="number" name="discount_value" defaultValue={quotation.discount_value} className={inputClass} />
-        </Field>
-        <Field label="Additional Charges (₹)">
-          <input type="number" name="additional_charges" defaultValue={quotation.additional_charges} className={inputClass} />
-        </Field>
-        <Field label="Tax (%)">
-          <input type="number" name="tax_percent" defaultValue={quotation.tax_percent} className={inputClass} />
-        </Field>
-      </div>
 
       {message && <p className="text-sm text-terracotta">{message}</p>}
 

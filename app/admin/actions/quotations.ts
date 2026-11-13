@@ -1,4 +1,5 @@
 "use server";
+import { requireAdmin } from "@/lib/auth/admin";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -6,7 +7,35 @@ import { getSupabaseAdminClient } from "@/lib/supabase/adminClient";
 import { sendQuotationPdfEmail } from "@/lib/email/quotationEmail";
 import { isSmtpConfigured } from "@/lib/email/smtp";
 import { renderQuotationPdf } from "@/lib/pdf/renderQuotationPdf";
-import type { QuotationData } from "@/lib/pdf/QuotationDocument";
+import type { QuotationData, QuotationOutput } from "@/lib/pdf/QuotationDocument";
+
+function readItemFields(formData: FormData) {
+  return {
+    service_name: String(formData.get("service_name") || ""),
+    description: String(formData.get("description") || "") || null,
+    requirement: String(formData.get("requirement") || "") || null,
+    event_date: String(formData.get("event_date") || "") || null,
+    duration: String(formData.get("duration") || "") || null,
+    quantity: 1,
+    unit_price: Number(formData.get("amount") || 0),
+  };
+}
+
+function readOutputs(value: FormDataEntryValue | null): QuotationOutput[] {
+  try {
+    const rows: unknown = JSON.parse(String(value ?? "[]"));
+    if (!Array.isArray(rows)) return [];
+    return rows
+      .map((row) => ({
+        output: String(row?.output ?? "").trim(),
+        count: String(row?.count ?? "").trim(),
+        includes: String(row?.includes ?? "").trim(),
+      }))
+      .filter((row) => row.output || row.count || row.includes);
+  } catch {
+    return [];
+  }
+}
 
 async function generateQuotationNumber(supabase: ReturnType<typeof getSupabaseAdminClient>) {
   const year = new Date().getFullYear();
@@ -24,6 +53,7 @@ async function generateQuotationNumber(supabase: ReturnType<typeof getSupabaseAd
 }
 
 export async function createQuotation(formData: FormData) {
+  await requireAdmin();
   const supabase = getSupabaseAdminClient();
   if (!supabase) return { error: "Supabase not configured." };
 
@@ -36,8 +66,6 @@ export async function createQuotation(formData: FormData) {
       quotation_number,
       lead_id: leadId,
       customer_name: String(formData.get("customer_name") || "") || null,
-      bride_name: String(formData.get("bride_name") || "") || null,
-      groom_name: String(formData.get("groom_name") || "") || null,
       mobile: String(formData.get("mobile") || "") || null,
       email: String(formData.get("email") || "") || null,
       event_date: String(formData.get("event_date") || "") || null,
@@ -56,13 +84,12 @@ export async function createQuotation(formData: FormData) {
 }
 
 export async function updateQuotationDetails(id: string, formData: FormData) {
+  await requireAdmin();
   const supabase = getSupabaseAdminClient();
   if (!supabase) return { error: "Supabase not configured." };
 
   const update: Record<string, unknown> = {
     customer_name: String(formData.get("customer_name") || "") || null,
-    bride_name: String(formData.get("bride_name") || "") || null,
-    groom_name: String(formData.get("groom_name") || "") || null,
     mobile: String(formData.get("mobile") || "") || null,
     email: String(formData.get("email") || "") || null,
     event_date: String(formData.get("event_date") || "") || null,
@@ -72,6 +99,8 @@ export async function updateQuotationDetails(id: string, formData: FormData) {
     number_of_guests: formData.get("number_of_guests") ? Number(formData.get("number_of_guests")) : null,
     intro_note: String(formData.get("intro_note") || "") || null,
     terms: String(formData.get("terms") || "") || null,
+    payment_schedule: String(formData.get("payment_schedule") || "") || null,
+    outputs: readOutputs(formData.get("outputs")),
     discount_type: String(formData.get("discount_type") || "fixed"),
     discount_value: Number(formData.get("discount_value") || 0),
     additional_charges: Number(formData.get("additional_charges") || 0),
@@ -87,6 +116,7 @@ export async function updateQuotationDetails(id: string, formData: FormData) {
 }
 
 export async function deleteQuotation(id: string) {
+  await requireAdmin();
   const supabase = getSupabaseAdminClient();
   if (!supabase) return { error: "Supabase not configured." };
 
@@ -98,6 +128,7 @@ export async function deleteQuotation(id: string) {
 }
 
 export async function addQuotationItem(quotationId: string, formData: FormData) {
+  await requireAdmin();
   const supabase = getSupabaseAdminClient();
   if (!supabase) return { error: "Supabase not configured." };
 
@@ -111,10 +142,7 @@ export async function addQuotationItem(quotationId: string, formData: FormData) 
 
   const { error } = await supabase.from("quotation_items").insert({
     quotation_id: quotationId,
-    service_name: String(formData.get("service_name") || ""),
-    description: String(formData.get("description") || "") || null,
-    quantity: Number(formData.get("quantity") || 1),
-    unit_price: Number(formData.get("unit_price") || 0),
+    ...readItemFields(formData),
     display_order: nextOrder,
   });
 
@@ -125,17 +153,13 @@ export async function addQuotationItem(quotationId: string, formData: FormData) 
 }
 
 export async function updateQuotationItem(itemId: string, quotationId: string, formData: FormData) {
+  await requireAdmin();
   const supabase = getSupabaseAdminClient();
   if (!supabase) return { error: "Supabase not configured." };
 
   const { error } = await supabase
     .from("quotation_items")
-    .update({
-      service_name: String(formData.get("service_name") || ""),
-      description: String(formData.get("description") || "") || null,
-      quantity: Number(formData.get("quantity") || 1),
-      unit_price: Number(formData.get("unit_price") || 0),
-    })
+    .update(readItemFields(formData))
     .eq("id", itemId);
 
   if (error) return { error: error.message };
@@ -145,6 +169,7 @@ export async function updateQuotationItem(itemId: string, quotationId: string, f
 }
 
 export async function deleteQuotationItem(itemId: string, quotationId: string) {
+  await requireAdmin();
   const supabase = getSupabaseAdminClient();
   if (!supabase) return { error: "Supabase not configured." };
 
@@ -173,6 +198,9 @@ async function loadQuotationData(quotationId: string): Promise<QuotationData | n
     items: (items ?? []).map((i) => ({
       service_name: i.service_name,
       description: i.description,
+      requirement: i.requirement,
+      event_date: i.event_date,
+      duration: i.duration,
       quantity: i.quantity,
       unit_price: i.unit_price,
     })),
@@ -180,6 +208,7 @@ async function loadQuotationData(quotationId: string): Promise<QuotationData | n
 }
 
 export async function sendQuotationEmail(quotationId: string) {
+  await requireAdmin();
   if (!isSmtpConfigured()) {
     return { error: "Email sending isn't configured yet. Add SMTP_HOST, EMAIL_USER and EMAIL_PASS to send quotations." };
   }
@@ -196,8 +225,9 @@ export async function sendQuotationEmail(quotationId: string) {
     const pdfBuffer = await renderQuotationPdf(data);
     await sendQuotationPdfEmail({
       to: data.email,
-      customerName: [data.groom_name, data.bride_name].filter(Boolean).join(" & ") || data.customer_name || "there",
+      customerName: data.customer_name || [data.groom_name, data.bride_name].filter(Boolean).join(" & ") || "there",
       quotationNumber: data.quotation_number,
+      eventType: data.wedding_type,
       pdfBuffer,
     });
   } catch (err) {
@@ -217,6 +247,7 @@ export async function sendQuotationEmail(quotationId: string) {
 }
 
 export async function updateQuotationStatus(quotationId: string, status: string) {
+  await requireAdmin();
   const supabase = getSupabaseAdminClient();
   if (!supabase) return { error: "Supabase not configured." };
 

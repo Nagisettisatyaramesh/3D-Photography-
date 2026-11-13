@@ -1,4 +1,5 @@
 import { getSupabaseAdminClient } from "@/lib/supabase/adminClient";
+import { connection } from "next/server";
 import { films as staticFilms } from "./films";
 import { brand } from "./brandImages";
 
@@ -12,6 +13,7 @@ export type LiveFilm = {
 };
 
 export async function getFilms(): Promise<LiveFilm[]> {
+  await connection();
   const supabase = getSupabaseAdminClient();
 
   if (supabase) {

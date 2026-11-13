@@ -1,4 +1,5 @@
 import { getSupabaseAdminClient } from "@/lib/supabase/adminClient";
+import { connection } from "next/server";
 import { services as staticServices, pricingNote as staticPricingNote } from "./services";
 import { brand } from "./brandImages";
 
@@ -15,6 +16,7 @@ export type LiveService = {
 };
 
 export async function getServices(): Promise<LiveService[]> {
+  await connection();
   const supabase = getSupabaseAdminClient();
 
   if (supabase) {

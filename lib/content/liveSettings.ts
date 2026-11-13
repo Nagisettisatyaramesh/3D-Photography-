@@ -1,4 +1,5 @@
 import { getSupabaseAdminClient } from "@/lib/supabase/adminClient";
+import { connection } from "next/server";
 import { siteConfig } from "./siteConfig";
 
 export type LiveSettings = {
@@ -14,6 +15,7 @@ export type LiveSettings = {
 };
 
 export async function getWebsiteSettings(): Promise<LiveSettings> {
+  await connection();
   const supabase = getSupabaseAdminClient();
 
   if (supabase) {

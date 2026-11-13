@@ -1,4 +1,5 @@
 import { getSupabaseAdminClient } from "@/lib/supabase/adminClient";
+import { connection } from "next/server";
 import { portfolio as staticPortfolio, categoryCopy, type PortfolioCategory } from "./portfolio";
 import { brand } from "./brandImages";
 
@@ -17,6 +18,7 @@ export type LivePortfolioItem = {
  * back to the static seed set if the database has no rows yet (or isn't
  * configured). Only call this from Server Components. */
 export async function getPortfolioItems(): Promise<LivePortfolioItem[]> {
+  await connection();
   const supabase = getSupabaseAdminClient();
 
   if (supabase) {

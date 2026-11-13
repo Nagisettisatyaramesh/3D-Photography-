@@ -1,8 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+import { getSupabaseAdminClient } from "@/lib/supabase/adminClient";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -12,13 +9,13 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "A valid date is required." }, { status: 400 });
   }
 
-  if (!url || !anonKey) {
+  const supabase = getSupabaseAdminClient();
+  if (!supabase) {
     return NextResponse.json({ status: "unknown" });
   }
 
   // Anon-key client reading the `public_availability` view only (date +
   // status) — never the underlying table, which also holds customer names.
-  const supabase = createClient(url, anonKey);
   const { data, error } = await supabase.from("public_availability").select("status").eq("date", date).maybeSingle();
 
   if (error) {

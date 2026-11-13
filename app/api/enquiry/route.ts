@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdminClient, isSupabaseAdminConfigured } from "@/lib/supabase/adminClient";
+import { sendEnquiryNotification } from "@/lib/email/enquiryNotification";
 
 const MOBILE_REGEX = /^[+]?[\d\s-]{10,15}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -58,7 +59,7 @@ export async function POST(request: Request) {
   }
 
   const supabase = getSupabaseAdminClient()!;
-  const { error } = await supabase.from("leads").insert({
+  const enquiry = {
     full_name: fullName.trim(),
     mobile: mobile.trim(),
     email: email.trim(),
@@ -68,11 +69,24 @@ export async function POST(request: Request) {
     number_of_events: numberOfEvents ? Number(numberOfEvents) : null,
     services_interested: Array.isArray(servicesInterested) ? servicesInterested : [],
     message: message?.trim() || null,
-  });
+  };
+  const { error } = await supabase.from("leads").insert(enquiry);
 
   if (error) {
     return NextResponse.json({ error: "Something went wrong saving your enquiry. Please try again." }, { status: 500 });
   }
 
-  return NextResponse.json({ success: true });
+  const emailSent = await sendEnquiryNotification({
+    fullName: enquiry.full_name,
+    mobile: enquiry.mobile,
+    email: enquiry.email,
+    eventType: enquiry.event_type,
+    eventDate: enquiry.event_date,
+    location: enquiry.location,
+    numberOfEvents: enquiry.number_of_events,
+    servicesInterested: enquiry.services_interested,
+    message: enquiry.message,
+  });
+
+  return NextResponse.json({ success: true, emailSent });
 }

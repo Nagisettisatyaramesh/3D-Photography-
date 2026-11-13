@@ -50,7 +50,7 @@ export default async function AdminQuotationsPage() {
                   </Link>
                 </td>
                 <td className="px-4 py-3">
-                  {[q.groom_name, q.bride_name].filter(Boolean).join(" & ") || q.customer_name || "—"}
+                  {q.customer_name || [q.groom_name, q.bride_name].filter(Boolean).join(" & ") || "—"}
                 </td>
                 <td className="px-4 py-3">
                   {q.event_date ? new Date(q.event_date).toLocaleDateString("en-IN") : "—"}

@@ -86,7 +86,6 @@ export default async function QuotationBuilderPage({ params }: { params: Promise
             </div>
           </div>
 
-          <h2 className="mt-12 mb-4 font-serif text-2xl italic">Event & Customer Details</h2>
           <QuotationDetailsForm quotation={quotation} />
         </div>
 

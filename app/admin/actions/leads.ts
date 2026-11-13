@@ -1,19 +1,11 @@
 "use server";
+import { requireAdmin } from "@/lib/auth/admin";
 
 import { revalidatePath } from "next/cache";
 import { getSupabaseAdminClient } from "@/lib/supabase/adminClient";
 
-export const leadStatuses = [
-  "new",
-  "contacted",
-  "follow-up",
-  "quotation-sent",
-  "negotiation",
-  "confirmed",
-  "lost",
-] as const;
-
 export async function updateLeadStatus(id: string, status: string) {
+  await requireAdmin();
   const supabase = getSupabaseAdminClient();
   if (!supabase) return { error: "Supabase not configured." };
 

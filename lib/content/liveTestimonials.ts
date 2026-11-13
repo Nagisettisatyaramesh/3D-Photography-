@@ -1,4 +1,5 @@
 import { getSupabaseAdminClient } from "@/lib/supabase/adminClient";
+import { connection } from "next/server";
 import { testimonials as staticTestimonials } from "./testimonials";
 import { unsplashUrl } from "./images";
 
@@ -11,6 +12,7 @@ export type LiveTestimonial = {
 };
 
 export async function getTestimonials(): Promise<LiveTestimonial[]> {
+  await connection();
   const supabase = getSupabaseAdminClient();
 
   if (supabase) {

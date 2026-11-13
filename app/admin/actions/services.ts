@@ -1,4 +1,5 @@
 "use server";
+import { requireAdmin } from "@/lib/auth/admin";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -20,6 +21,7 @@ function slugify(name: string): string {
 }
 
 export async function createService(formData: FormData) {
+  await requireAdmin();
   const supabase = getSupabaseAdminClient();
   if (!supabase) return { error: "Supabase not configured." };
 
@@ -49,6 +51,7 @@ export async function createService(formData: FormData) {
 }
 
 export async function updateService(id: string, formData: FormData) {
+  await requireAdmin();
   const supabase = getSupabaseAdminClient();
   if (!supabase) return { error: "Supabase not configured." };
 
@@ -78,6 +81,7 @@ export async function updateService(id: string, formData: FormData) {
 }
 
 export async function deleteService(id: string) {
+  await requireAdmin();
   const supabase = getSupabaseAdminClient();
   if (!supabase) return { error: "Supabase not configured." };
 

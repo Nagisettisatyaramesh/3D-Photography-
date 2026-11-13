@@ -30,16 +30,7 @@ export function QuotationCreateForm({ leadId, lead }: { leadId?: string; lead?: 
     <form onSubmit={handleSubmit} className="flex max-w-2xl flex-col gap-6">
       {leadId && <input type="hidden" name="lead_id" value={leadId} />}
 
-      <div className="grid grid-cols-2 gap-4">
-        <Field label="Bride's Name">
-          <input name="bride_name" className={inputClass} />
-        </Field>
-        <Field label="Groom's Name">
-          <input name="groom_name" className={inputClass} />
-        </Field>
-      </div>
-
-      <Field label="Customer Name (if different from couple)">
+      <Field label="Customer Name">
         <input name="customer_name" defaultValue={lead?.full_name ?? ""} className={inputClass} />
       </Field>
 
@@ -56,7 +47,7 @@ export function QuotationCreateForm({ leadId, lead }: { leadId?: string; lead?: 
         <Field label="Event Date">
           <input type="date" name="event_date" defaultValue={lead?.event_date ?? ""} className={inputClass} />
         </Field>
-        <Field label="Wedding / Event Type">
+        <Field label="Event Type">
           <input name="wedding_type" defaultValue={lead?.event_type ?? ""} className={inputClass} />
         </Field>
       </div>

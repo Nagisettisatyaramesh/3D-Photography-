@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { getSupabaseServerClient } from "@/lib/supabase/serverClient";
 import { signOutAction } from "@/app/admin/actions";
 
@@ -17,6 +18,7 @@ const navItems = [
 export default async function AdminProtectedLayout({ children }: { children: React.ReactNode }) {
   const supabase = await getSupabaseServerClient();
   const { data } = (await supabase?.auth.getUser()) ?? { data: { user: null } };
+  if (!data.user) redirect("/admin/login");
 
   return (
     <div className="flex min-h-screen bg-parchment text-ink">

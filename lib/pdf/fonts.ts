@@ -3,9 +3,8 @@ import { Font } from "@react-pdf/renderer";
 
 let registered = false;
 
-/** Registers the brand's PDF fonts once per server process. Variable TTFs
- * (Bodoni Moda / Work Sans) — react-pdf/fontkit resolves the requested
- * weight/style instance from the variation axes at render time. */
+/** Registers the quotation's PDF fonts once per server process: Cinzel for
+ * headings and Urbanist for body text, both under the SIL Open Font License. */
 export function registerPdfFonts() {
   if (registered) return;
   registered = true;
@@ -13,22 +12,16 @@ export function registerPdfFonts() {
   const dir = path.join(process.cwd(), "lib/pdf/fonts");
 
   Font.register({
-    family: "Bodoni",
-    fonts: [
-      { src: path.join(dir, "bodoni-variable.ttf"), fontWeight: 400 },
-      { src: path.join(dir, "bodoni-variable.ttf"), fontWeight: 700 },
-      { src: path.join(dir, "bodoni-italic-variable.ttf"), fontWeight: 400, fontStyle: "italic" },
-      { src: path.join(dir, "bodoni-italic-variable.ttf"), fontWeight: 700, fontStyle: "italic" },
-    ],
+    family: "Cinzel",
+    fonts: [{ src: path.join(dir, "cinzel-700.woff"), fontWeight: 700 }],
   });
 
   Font.register({
-    family: "WorkSans",
+    family: "Urbanist",
     fonts: [
-      { src: path.join(dir, "worksans-variable.ttf"), fontWeight: 400 },
-      { src: path.join(dir, "worksans-variable.ttf"), fontWeight: 500 },
-      { src: path.join(dir, "worksans-variable.ttf"), fontWeight: 600 },
-      { src: path.join(dir, "worksans-variable.ttf"), fontWeight: 700 },
+      { src: path.join(dir, "urbanist-400.woff"), fontWeight: 400 },
+      { src: path.join(dir, "urbanist-500.woff"), fontWeight: 500 },
+      { src: path.join(dir, "urbanist-600.woff"), fontWeight: 600 },
     ],
   });
 

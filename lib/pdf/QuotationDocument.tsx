@@ -1,4 +1,6 @@
-import { Document, Page, View, Text, StyleSheet } from "@react-pdf/renderer";
+import { readFileSync } from "fs";
+import path from "path";
+import { Document, Image as PdfImage, Link, Page, View, Text, StyleSheet } from "@react-pdf/renderer";
 import { registerPdfFonts } from "./fonts";
 
 registerPdfFonts();
@@ -6,8 +8,17 @@ registerPdfFonts();
 export type QuotationItemData = {
   service_name: string;
   description: string | null;
+  requirement: string | null;
+  event_date: string | null;
+  duration: string | null;
   quantity: number;
   unit_price: number;
+};
+
+export type QuotationOutput = {
+  output: string;
+  count: string;
+  includes: string;
 };
 
 export type QuotationData = {
@@ -25,6 +36,8 @@ export type QuotationData = {
   cover_image_url: string | null;
   intro_note: string | null;
   terms: string | null;
+  payment_schedule: string | null;
+  outputs: QuotationOutput[] | null;
   discount_type: "percent" | "fixed";
   discount_value: number;
   additional_charges: number;
@@ -33,168 +46,135 @@ export type QuotationData = {
   items: QuotationItemData[];
 };
 
-const ink = "#2b241e";
-const parchment = "#eae3d3";
-const terracotta = "#e2926f";
-const blush = "#f3dccb";
-
-const styles = StyleSheet.create({
-  page: {
-    backgroundColor: parchment,
-    color: ink,
-    fontFamily: "WorkSans",
-    padding: 0,
-  },
-  section: {
-    paddingHorizontal: 56,
-    paddingVertical: 48,
-  },
-  pageHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-    borderBottomWidth: 1,
-    borderBottomColor: `${ink}22`,
-    paddingBottom: 14,
-    marginBottom: 24,
-  },
-  studioName: {
-    fontFamily: "Bodoni",
-    fontStyle: "italic",
-    fontWeight: 700,
-    fontSize: 15,
-    marginBottom: 2,
-  },
-  pageHeaderTitle: {
-    fontFamily: "Bodoni",
-    fontStyle: "italic",
-    fontWeight: 700,
-    fontSize: 26,
-  },
-  pageHeaderMeta: {
-    fontSize: 9,
-    color: `${ink}88`,
-    textAlign: "right",
-  },
-
-  detailsStrip: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    backgroundColor: blush,
-    padding: 16,
-    marginBottom: 28,
-  },
-  detailsCell: {
-    width: "33%",
-    marginBottom: 10,
-  },
-  detailsLabel: {
-    fontSize: 7.5,
-    letterSpacing: 1.2,
-    textTransform: "uppercase",
-    color: `${ink}88`,
-    marginBottom: 3,
-  },
-  detailsValue: {
-    fontSize: 10.5,
-    fontWeight: 600,
-  },
-
-  table: {
-    marginTop: 4,
-  },
-  tableHeadRow: {
-    flexDirection: "row",
-    backgroundColor: ink,
-    paddingVertical: 9,
-    paddingHorizontal: 12,
-  },
-  tableHeadCell: {
-    fontSize: 8,
-    letterSpacing: 1,
-    textTransform: "uppercase",
-    color: parchment,
-  },
-  tableRow: {
-    flexDirection: "row",
-    paddingVertical: 11,
-    paddingHorizontal: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: `${ink}15`,
-  },
-  tableRowAlt: {
-    backgroundColor: `${blush}66`,
-  },
-  colService: { width: "40%" },
-  colQty: { width: "12%", textAlign: "center" },
-  colPrice: { width: "22%", textAlign: "right" },
-  colTotal: { width: "26%", textAlign: "right" },
-  serviceName: { fontSize: 10.5, fontWeight: 600 },
-  serviceDesc: { fontSize: 8.5, color: `${ink}88`, marginTop: 2 },
-  cellText: { fontSize: 10 },
-
-  totalsBlock: {
-    marginTop: 24,
-    marginLeft: "auto",
-    width: "55%",
-  },
-  totalsRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 6,
-  },
-  totalsLabel: { fontSize: 9.5, color: `${ink}99` },
-  totalsValue: { fontSize: 9.5, fontWeight: 600 },
-  grandTotalRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 8,
-    paddingTop: 14,
-    borderTopWidth: 1.5,
-    borderTopColor: ink,
-  },
-  grandTotalLabel: { fontFamily: "Bodoni", fontStyle: "italic", fontWeight: 700, fontSize: 15 },
-  grandTotalValue: { fontFamily: "Bodoni", fontStyle: "italic", fontWeight: 700, fontSize: 17, color: terracotta },
-
-  termsBlock: {
-    marginTop: 28,
-    backgroundColor: blush,
-    padding: 18,
-  },
-  termsLabel: {
-    fontSize: 9,
-    letterSpacing: 1.5,
-    textTransform: "uppercase",
-    color: terracotta,
-    marginBottom: 8,
-  },
-  termsText: {
-    fontSize: 9.5,
-    lineHeight: 1.6,
-    color: `${ink}cc`,
-  },
-
-  pageFooter: {
-    position: "absolute",
-    bottom: 28,
-    left: 56,
-    right: 56,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    fontSize: 8,
-    color: `${ink}66`,
-  },
+const ink = "#2e2522";
+const A4_WIDTH = 595.28;
+const A4_HEIGHT = 841.89;
+const readAsset = (name: string) => ({
+  data: readFileSync(path.join(process.cwd(), "lib/pdf/assets", name)),
+  format: "jpg" as const,
 });
 
-function formatINR(value: number) {
-  return `Rs. ${Math.round(value).toLocaleString("en-IN")}`;
+const headingFont = { fontFamily: "Cinzel", fontWeight: 700 } as const;
+
+const styles = StyleSheet.create({
+  firstPage: { color: ink, fontFamily: "Urbanist", paddingTop: 122, paddingBottom: 136, paddingHorizontal: 63 },
+  lastPage: { color: ink, fontFamily: "Urbanist", paddingTop: 158, paddingBottom: 136, paddingHorizontal: 63 },
+  letterhead: { position: "absolute", top: 0, left: 0, width: A4_WIDTH, height: A4_HEIGHT },
+  footerLogo: { position: "absolute", left: 63, top: 708, width: 136, height: 28 },
+  emailLink: { position: "absolute", left: 400, top: 740, width: 145, height: 13 },
+  youtubeLink: { position: "absolute", left: 400, top: 757, width: 105, height: 13 },
+  instagramLink: { position: "absolute", left: 400, top: 771, width: 105, height: 13 },
+
+  quotationNumber: { ...headingFont, fontSize: 15, textAlign: "right" },
+  quotationDate: { fontSize: 8.5, fontWeight: 500, letterSpacing: 0.5, textAlign: "right", marginTop: 10 },
+  toLabel: { ...headingFont, fontSize: 13, marginTop: 8 },
+  customerName: { ...headingFont, fontSize: 13, textTransform: "uppercase", letterSpacing: 0.4, marginTop: 8 },
+  introNote: { fontSize: 8.5, lineHeight: 1.5, marginTop: 10 },
+
+  tableHead: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    borderBottomWidth: 1,
+    borderBottomColor: ink,
+    paddingBottom: 5,
+    marginTop: 16,
+  },
+  tableHeadCell: { ...headingFont, fontSize: 10, textTransform: "uppercase" },
+  tableRow: { flexDirection: "row", alignItems: "flex-start", paddingTop: 5 },
+  colEvent: { width: "32%", paddingRight: 8 },
+  colRequirement: { width: "26%", textAlign: "center", paddingRight: 6 },
+  colDate: { width: "14%", textAlign: "center" },
+  colDuration: { width: "16%", textAlign: "center" },
+  colTotal: { width: "12%", textAlign: "right" },
+  eventName: { fontSize: 9.5, fontWeight: 500 },
+  eventDescription: { fontSize: 7, marginTop: 1.5, lineHeight: 1.25 },
+  requirement: { fontSize: 7, lineHeight: 1.35 },
+  rowValue: { fontSize: 8.5, fontWeight: 500 },
+  tableEnd: { borderBottomWidth: 1, borderBottomColor: ink, marginTop: 10 },
+
+  totals: { marginLeft: "auto", width: "42%", marginTop: 9 },
+  totalsRow: { flexDirection: "row", justifyContent: "space-between", paddingBottom: 5 },
+  totalsLabel: { fontSize: 8.5 },
+  totalsValue: { fontSize: 8.5 },
+  grandTotal: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "baseline",
+    borderTopWidth: 1,
+    borderTopColor: ink,
+    paddingTop: 7,
+  },
+  grandTotalLabel: { ...headingFont, fontSize: 11 },
+  grandTotalValue: { ...headingFont, fontSize: 13 },
+
+  noteHeading: { fontSize: 10, fontWeight: 600, textTransform: "uppercase", marginBottom: 7 },
+  dottedLine: { flexDirection: "row", alignItems: "flex-start", marginBottom: 3 },
+  dot: { width: 4, height: 4, borderRadius: 2, backgroundColor: ink, marginTop: 3.4, marginRight: 7 },
+  dottedText: { flex: 1, fontSize: 8, fontWeight: 500, lineHeight: 1.35 },
+
+  outputsHeading: { ...headingFont, fontSize: 11, textTransform: "uppercase" },
+  colOutput: { width: "46%", paddingRight: 8 },
+  colCount: { width: "26%", textAlign: "center", paddingRight: 6 },
+  colIncludes: { width: "28%", textAlign: "center" },
+  outputRow: { flexDirection: "row", alignItems: "flex-start", paddingTop: 6 },
+  outputText: { fontSize: 8, lineHeight: 1.35 },
+});
+
+const EMAIL_URL = "mailto:uniquecreations.av@gmail.com";
+const INSTAGRAM_URL = "https://instagram.com/uniquecreations.av";
+const YOUTUBE_URL = "https://www.youtube.com/@uniquecreations2047";
+
+/** The logo above the address, and clickable areas over the email, YouTube
+ * and Instagram lines printed in the letterhead image. */
+function FooterExtras() {
+  return (
+    <>
+      <PdfImage fixed src={readAsset("quotation-footer-logo.jpg")} style={styles.footerLogo} />
+      <Link fixed src={EMAIL_URL} style={styles.emailLink}>
+        <Text> </Text>
+      </Link>
+      <Link fixed src={YOUTUBE_URL} style={styles.youtubeLink}>
+        <Text> </Text>
+      </Link>
+      <Link fixed src={INSTAGRAM_URL} style={styles.instagramLink}>
+        <Text> </Text>
+      </Link>
+    </>
+  );
 }
 
-function formatDate(value: string | null) {
-  if (!value) return "To be finalised";
+/** Shows each line with one dot in front, whether or not the admin typed one. */
+function DottedLines({ text }: { text: string }) {
+  const lines = text
+    .split(/\r?\n/)
+    .map((line) => line.replace(/^[\s.•·-]+/, "").trimEnd())
+    .filter(Boolean);
+
+  return (
+    <>
+      {lines.map((line, i) => (
+        <View key={i} style={styles.dottedLine}>
+          <View style={styles.dot} />
+          <Text style={styles.dottedText}>{line}</Text>
+        </View>
+      ))}
+    </>
+  );
+}
+
+function formatAmount(value: number) {
+  return `${Math.round(value).toLocaleString("en-IN")}/-`;
+}
+
+function formatQuotationDate(value: string) {
   const d = new Date(value);
   if (Number.isNaN(d.getTime())) return value;
-  return d.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
+  return d.toLocaleDateString("en-US", { month: "long", day: "2-digit", year: "numeric" }).toUpperCase();
+}
+
+function formatEventDate(value: string | null) {
+  const match = value?.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  return match ? `${match[3]}-${match[2]}-${match[1]}` : "–";
 }
 
 export function computeQuotationTotals(data: {
@@ -213,127 +193,126 @@ export function computeQuotationTotals(data: {
   return { subtotal, discount, afterDiscount, withCharges, tax, grandTotal };
 }
 
-/** The single page the studio appends to its own portfolio PDF to turn it
- * into a customer's quotation — mirrors how the studio actually works
- * today (same portfolio deck for everyone, one pricing page added at the
- * end). Merged onto the real portfolio PDF in renderQuotationPdf.ts. */
+/** The pages added after the studio's portfolio to turn it into a customer's
+ * quotation. Merged onto the portfolio PDF in renderQuotationPdf.ts. The logo,
+ * leaves and contact footer are part of the letterhead images. */
 export function QuotationDocument({ data }: { data: QuotationData }) {
   const totals = computeQuotationTotals(data);
-  const coupleNames = [data.groom_name, data.bride_name].filter(Boolean).join(" & ") || data.customer_name || "Valued Customer";
+  const customerName =
+    data.customer_name || [data.groom_name, data.bride_name].filter(Boolean).join(" & ") || "Valued Customer";
+  const outputs = data.outputs ?? [];
+  const anyItemHasDate = data.items.some((item) => item.event_date);
 
   return (
     <Document title={`${data.quotation_number} — Unique Creations`}>
-      <Page size="A4" style={styles.page}>
-        <View style={styles.section}>
-          <View style={styles.pageHeader}>
-            <View>
-              <Text style={styles.studioName}>Unique Creations</Text>
-              <Text style={styles.pageHeaderTitle}>Your Investment</Text>
-            </View>
-            <Text style={styles.pageHeaderMeta}>{data.quotation_number}{"\n"}{formatDate(data.created_at)}</Text>
-          </View>
+      <Page size="A4" style={styles.firstPage}>
+        <PdfImage fixed src={readAsset("quotation-letterhead-first.jpg")} style={styles.letterhead} />
+        <FooterExtras />
 
-          <View style={styles.detailsStrip}>
-            <View style={styles.detailsCell}>
-              <Text style={styles.detailsLabel}>Couple</Text>
-              <Text style={styles.detailsValue}>{coupleNames}</Text>
-            </View>
-            <View style={styles.detailsCell}>
-              <Text style={styles.detailsLabel}>Event Date</Text>
-              <Text style={styles.detailsValue}>{formatDate(data.event_date)}</Text>
-            </View>
-            <View style={styles.detailsCell}>
-              <Text style={styles.detailsLabel}>Location</Text>
-              <Text style={styles.detailsValue}>{data.event_location || "To be finalised"}</Text>
-            </View>
-            <View style={styles.detailsCell}>
-              <Text style={styles.detailsLabel}>Wedding Type</Text>
-              <Text style={styles.detailsValue}>{data.wedding_type || "—"}</Text>
-            </View>
-            <View style={styles.detailsCell}>
-              <Text style={styles.detailsLabel}>Contact</Text>
-              <Text style={styles.detailsValue}>{data.mobile || data.email || "—"}</Text>
-            </View>
-            <View style={styles.detailsCell}>
-              <Text style={styles.detailsLabel}>Guests</Text>
-              <Text style={styles.detailsValue}>{data.number_of_guests ?? "—"}</Text>
-            </View>
-          </View>
+        <Text style={styles.quotationNumber}>Quotation No. {data.quotation_number}</Text>
+        <Text style={styles.quotationDate}>{formatQuotationDate(data.created_at)}</Text>
 
-          {data.intro_note ? <Text style={{ fontSize: 10, lineHeight: 1.6, color: `${ink}cc`, marginBottom: 20 }}>{data.intro_note}</Text> : null}
+        <Text style={styles.toLabel}>To</Text>
+        <Text style={styles.customerName}>{customerName}</Text>
+        {data.intro_note ? <Text style={styles.introNote}>{data.intro_note}</Text> : null}
 
-          <View style={styles.table}>
-            <View style={styles.tableHeadRow}>
-              <Text style={[styles.tableHeadCell, styles.colService]}>Service</Text>
-              <Text style={[styles.tableHeadCell, styles.colQty]}>Qty</Text>
-              <Text style={[styles.tableHeadCell, styles.colPrice]}>Rate</Text>
-              <Text style={[styles.tableHeadCell, styles.colTotal]}>Amount</Text>
-            </View>
+        <View style={styles.tableHead} fixed>
+          <Text style={[styles.tableHeadCell, styles.colEvent]}>Event</Text>
+          <Text style={[styles.tableHeadCell, styles.colRequirement]}>Requirement</Text>
+          <Text style={[styles.tableHeadCell, styles.colDate]}>Date</Text>
+          <Text style={[styles.tableHeadCell, styles.colDuration]}>Duration/{"\n"}Schedules</Text>
+          <Text style={[styles.tableHeadCell, styles.colTotal]}>Total</Text>
+        </View>
 
-            {data.items.map((item, i) => (
-              <View key={i} style={[styles.tableRow, i % 2 === 1 ? styles.tableRowAlt : {}]}>
-                <View style={styles.colService}>
-                  <Text style={styles.serviceName}>{item.service_name}</Text>
-                  {item.description ? <Text style={styles.serviceDesc}>{item.description}</Text> : null}
-                </View>
-                <Text style={[styles.cellText, styles.colQty]}>{item.quantity}</Text>
-                <Text style={[styles.cellText, styles.colPrice]}>{formatINR(item.unit_price)}</Text>
-                <Text style={[styles.cellText, styles.colTotal]}>{formatINR(item.quantity * item.unit_price)}</Text>
+        {data.items.map((item, i) => {
+          const amount = item.quantity * item.unit_price;
+          const eventDate = anyItemHasDate ? item.event_date : i === 0 ? data.event_date : null;
+          return (
+            <View key={i} style={styles.tableRow} wrap={false}>
+              <View style={styles.colEvent}>
+                <Text style={styles.eventName}>{item.service_name}</Text>
+                {item.description ? <Text style={styles.eventDescription}>{item.description}</Text> : null}
               </View>
-            ))}
+              <Text style={[styles.requirement, styles.colRequirement]}>{item.requirement || ""}</Text>
+              <Text style={[styles.rowValue, styles.colDate]}>{formatEventDate(eventDate)}</Text>
+              <Text style={[styles.rowValue, styles.colDuration]}>{item.duration || "–"}</Text>
+              <Text style={[styles.rowValue, styles.colTotal]}>{amount > 0 ? formatAmount(amount) : ""}</Text>
+            </View>
+          );
+        })}
+        <View style={styles.tableEnd} />
 
-            {data.items.length === 0 ? (
-              <View style={styles.tableRow}>
-                <Text style={[styles.cellText, { color: `${ink}66` }]}>No line items added yet.</Text>
-              </View>
-            ) : null}
+        <View style={styles.totals} wrap={false}>
+          <View style={styles.totalsRow}>
+            <Text style={styles.totalsLabel}>Sub Total</Text>
+            <Text style={styles.totalsValue}>{formatAmount(totals.subtotal)}</Text>
           </View>
-
-          <View style={styles.totalsBlock}>
+          {totals.discount > 0 ? (
             <View style={styles.totalsRow}>
-              <Text style={styles.totalsLabel}>Subtotal</Text>
-              <Text style={styles.totalsValue}>{formatINR(totals.subtotal)}</Text>
+              <Text style={styles.totalsLabel}>
+                Discount{data.discount_type === "percent" ? ` (${data.discount_value}%)` : ""}
+              </Text>
+              <Text style={styles.totalsValue}>- {formatAmount(totals.discount)}</Text>
             </View>
-            {totals.discount > 0 ? (
-              <View style={styles.totalsRow}>
-                <Text style={styles.totalsLabel}>
-                  Discount {data.discount_type === "percent" ? `(${data.discount_value}%)` : ""}
-                </Text>
-                <Text style={styles.totalsValue}>- {formatINR(totals.discount)}</Text>
-              </View>
-            ) : null}
-            {data.additional_charges > 0 ? (
-              <View style={styles.totalsRow}>
-                <Text style={styles.totalsLabel}>Additional Charges</Text>
-                <Text style={styles.totalsValue}>{formatINR(data.additional_charges)}</Text>
-              </View>
-            ) : null}
-            {data.tax_percent > 0 ? (
-              <View style={styles.totalsRow}>
-                <Text style={styles.totalsLabel}>Tax ({data.tax_percent}%)</Text>
-                <Text style={styles.totalsValue}>{formatINR(totals.tax)}</Text>
-              </View>
-            ) : null}
-            <View style={styles.grandTotalRow}>
-              <Text style={styles.grandTotalLabel}>Total Investment</Text>
-              <Text style={styles.grandTotalValue}>{formatINR(totals.grandTotal)}</Text>
+          ) : null}
+          {data.additional_charges > 0 ? (
+            <View style={styles.totalsRow}>
+              <Text style={styles.totalsLabel}>Additional Charges</Text>
+              <Text style={styles.totalsValue}>{formatAmount(data.additional_charges)}</Text>
             </View>
-          </View>
-
-          <View style={styles.termsBlock}>
-            <Text style={styles.termsLabel}>Payment Terms</Text>
-            <Text style={styles.termsText}>
-              {data.terms ||
-                "A confirmation advance secures your date on our calendar. The remaining balance is payable as per the schedule agreed at booking. This proposal is valid for 15 days from the date above."}
-            </Text>
+          ) : null}
+          {data.tax_percent > 0 ? (
+            <View style={styles.totalsRow}>
+              <Text style={styles.totalsLabel}>Tax ({data.tax_percent}%)</Text>
+              <Text style={styles.totalsValue}>{formatAmount(totals.tax)}</Text>
+            </View>
+          ) : null}
+          <View style={styles.grandTotal}>
+            <Text style={styles.grandTotalLabel}>TOTAL</Text>
+            <Text style={styles.grandTotalValue}>{formatAmount(totals.grandTotal)}</Text>
           </View>
         </View>
 
-        <View style={styles.pageFooter} fixed>
-          <Text>Unique Creations · Tells your story with heart</Text>
-          <Text>hello@uniquecreations.in · +91 98765 43210</Text>
-        </View>
+        {data.payment_schedule ? (
+          <View style={{ marginTop: 16, width: "72%" }} wrap={false}>
+            <Text style={styles.noteHeading}>Payment Schedule</Text>
+            <DottedLines text={data.payment_schedule} />
+          </View>
+        ) : null}
       </Page>
+
+      {outputs.length > 0 || data.terms ? (
+        <Page size="A4" style={styles.lastPage}>
+          <PdfImage fixed src={readAsset("quotation-letterhead-last.jpg")} style={styles.letterhead} />
+          <FooterExtras />
+
+          {outputs.length > 0 ? (
+            <View style={{ marginBottom: 44 }}>
+              <Text style={styles.outputsHeading}>Outputs We Give :</Text>
+              <View style={styles.tableHead}>
+                <Text style={[styles.tableHeadCell, styles.colOutput]}>Outputs</Text>
+                <Text style={[styles.tableHeadCell, styles.colCount]}>Count/{"\n"}Duration Approx</Text>
+                <Text style={[styles.tableHeadCell, styles.colIncludes]}>Includes</Text>
+              </View>
+              {outputs.map((row, i) => (
+                <View key={i} style={styles.outputRow} wrap={false}>
+                  <Text style={[styles.outputText, styles.colOutput]}>{row.output}</Text>
+                  <Text style={[styles.outputText, styles.colCount]}>{row.count}</Text>
+                  <Text style={[styles.outputText, styles.colIncludes]}>{row.includes}</Text>
+                </View>
+              ))}
+              <View style={styles.tableEnd} />
+            </View>
+          ) : null}
+
+          {data.terms ? (
+            <View style={{ width: "72%" }} wrap={false}>
+              <Text style={styles.noteHeading}>Terms &amp; Conditions</Text>
+              <DottedLines text={data.terms} />
+            </View>
+          ) : null}
+        </Page>
+      ) : null}
     </Document>
   );
 }

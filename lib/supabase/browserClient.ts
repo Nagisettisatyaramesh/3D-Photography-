@@ -1,11 +1,9 @@
 "use client";
-
-import { createBrowserClient } from "@supabase/ssr";
-
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
 export function getSupabaseBrowserClient() {
-  if (!url || !anonKey) return null;
-  return createBrowserClient(url, anonKey);
+  return { auth: { signInWithPassword: async (credentials: { email: string; password: string }) => {
+    try {
+      const response = await fetch("/api/admin/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(credentials) });
+      return { error: response.ok ? null : { message: "Sign-in failed." } };
+    } catch { return { error: { message: "Unable to connect." } }; }
+  } } };
 }
