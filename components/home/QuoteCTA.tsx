@@ -2,15 +2,16 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
-import { brand } from "@/lib/content/brandImages";
+import { useSiteImages } from "@/components/providers/SiteImagesProvider";
 import { driftUp, expandReveal, viewportOnce } from "@/lib/motion";
 import { FloatingButton } from "@/components/ui/FloatingButton";
 
 export function QuoteCTA() {
+  const image = useSiteImages();
   return (
     <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden bg-black px-6 py-28 text-center text-parchment md:py-40">
       <motion.div variants={expandReveal} initial="hidden" whileInView="visible" viewport={viewportOnce} className="absolute inset-0 opacity-40">
-        <Image src={brand.backgroundQuote} alt="" fill className="object-cover" sizes="100vw" />
+        <Image src={image("backgroundQuote")} alt="" fill className="object-cover" sizes="100vw" />
       </motion.div>
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/40" />
 

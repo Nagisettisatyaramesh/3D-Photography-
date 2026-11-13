@@ -3,12 +3,13 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
-import { brand, type BrandImageKey } from "@/lib/content/brandImages";
+import { useSiteImages } from "@/components/providers/SiteImagesProvider";
+import type { SiteImageKey } from "@/lib/content/siteImages";
 import { siteConfig } from "@/lib/content/siteConfig";
 
 // Each layer drifts by a different multiplier of the cursor offset, so the
 // photos read as sitting at different depths behind the statement.
-const layers: { key: BrandImageKey; pos: string; size: string; depth: number }[] = [
+const layers: { key: SiteImageKey; pos: string; size: string; depth: number }[] = [
   { key: "ourBelief1", pos: "left-[4%] top-[14%]", size: "h-[230px] w-[170px] md:h-[400px] md:w-[300px]", depth: -28 },
   { key: "ourBelief2", pos: "right-[6%] top-[8%]", size: "h-[190px] w-[140px] md:h-[350px] md:w-[260px]", depth: 46 },
   { key: "ourBelief3", pos: "right-[14%] bottom-[8%]", size: "h-[150px] w-[120px] md:h-[290px] md:w-[220px]", depth: -84 },
@@ -16,6 +17,7 @@ const layers: { key: BrandImageKey; pos: string; size: string; depth: number }[]
 ];
 
 function Layer({ item, mx, my }: { item: (typeof layers)[number]; mx: ReturnType<typeof useSpring>; my: ReturnType<typeof useSpring> }) {
+  const image = useSiteImages();
   const x = useTransform(mx, (v) => v * item.depth);
   const y = useTransform(my, (v) => v * item.depth * 0.7);
   const rotateY = useTransform(mx, (v) => v * item.depth * -0.2);
@@ -24,7 +26,7 @@ function Layer({ item, mx, my }: { item: (typeof layers)[number]; mx: ReturnType
       style={{ x, y, rotateY }}
       className={`absolute ${item.pos} ${item.size} overflow-hidden rounded-md shadow-[0_40px_70px_rgba(0,0,0,0.6)]`}
     >
-      <Image src={brand[item.key]} alt="" fill sizes="300px" className="scale-110 object-cover" />
+      <Image src={image(item.key)} alt="" fill sizes="300px" className="scale-110 object-cover" />
     </motion.div>
   );
 }

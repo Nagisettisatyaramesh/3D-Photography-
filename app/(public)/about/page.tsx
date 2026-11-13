@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
-import { brand } from "@/lib/content/brandImages";
+import { useSiteImages } from "@/components/providers/SiteImagesProvider";
 import { siteConfig } from "@/lib/content/siteConfig";
 import { driftUp, viewportOnce } from "@/lib/motion";
 import { RevealText } from "@/components/ui/RevealText";
@@ -10,6 +10,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FloatingButton } from "@/components/ui/FloatingButton";
 
 export default function AboutPage() {
+  const image = useSiteImages();
   return (
     <main>
       <section className="relative flex h-[70svh] min-h-[480px] w-full items-end overflow-hidden bg-black">
@@ -20,7 +21,7 @@ export default function AboutPage() {
           className="absolute inset-0"
         >
           <Image
-            src={brand.coverAbout}
+            src={image("coverAbout")}
             alt="Bride seated on a decorated stage"
             fill
             loading="eager"

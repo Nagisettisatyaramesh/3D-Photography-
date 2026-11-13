@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
-import { brand } from "@/lib/content/brandImages";
+import { useSiteImages } from "@/components/providers/SiteImagesProvider";
 import { driftUp, expandReveal, useParallax, viewportOnce } from "@/lib/motion";
 import { FloatingChip } from "@/components/ui/FloatingChip";
 import { FloatingButton } from "@/components/ui/FloatingButton";
 
 export function FeaturedStory() {
+  const image = useSiteImages();
   const { nodeRef: backRef, y: backY } = useParallax([40, -40]);
   const { nodeRef: frontRef, y: frontY } = useParallax([-30, 30]);
 
@@ -47,7 +48,7 @@ export function FeaturedStory() {
             className="absolute right-0 top-0 h-[75%] w-[72%] overflow-hidden"
           >
             <Image
-              src={brand.featuredStoryLarge}
+              src={image("featuredStoryLarge")}
               alt="Couple at their wedding, in black and white"
               fill
               className="object-cover"
@@ -66,7 +67,7 @@ export function FeaturedStory() {
             className="absolute bottom-0 left-0 h-[55%] w-[52%] overflow-hidden border-4 border-parchment shadow-[0_30px_70px_-25px_rgba(20,17,16,0.45)]"
           >
             <Image
-              src={brand.featuredStorySmall}
+              src={image("featuredStorySmall")}
               alt="Bride during a wedding ritual, in black and white"
               fill
               className="object-cover"

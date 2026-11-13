@@ -3,14 +3,15 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useSpring, useTransform } from "motion/react";
-import { brand, type BrandImageKey } from "@/lib/content/brandImages";
+import { useSiteImages } from "@/components/providers/SiteImagesProvider";
+import type { SiteImageKey } from "@/lib/content/siteImages";
 import { categoryCopy, type PortfolioCategory } from "@/lib/content/portfolio";
 import { driftUp, viewportOnce } from "@/lib/motion";
 import { RevealText } from "@/components/ui/RevealText";
 import { FloatingButton } from "@/components/ui/FloatingButton";
 import { Tilt3D } from "@/components/ui/Tilt3D";
 
-const journey: { category: PortfolioCategory; image: BrandImageKey }[] = [
+const journey: { category: PortfolioCategory; image: SiteImageKey }[] = [
   { category: "Pre-Wedding", image: "storiesPreWedding" },
   { category: "Groom's Haldi", image: "storiesGroomHaldi" },
   { category: "Bride's Haldi", image: "storiesBrideHaldi" },
@@ -21,12 +22,13 @@ const journey: { category: PortfolioCategory; image: BrandImageKey }[] = [
 ];
 
 function Chapter({ step, index }: { step: (typeof journey)[number]; index: number }) {
+  const image = useSiteImages();
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const imageY = useTransform(scrollYProgress, [0, 1], [50, -50]);
   const numberX = useTransform(scrollYProgress, [0, 1], [index % 2 ? 80 : -80, index % 2 ? -80 : 80]);
   const flip = index % 2 === 1;
-  const src = brand[step.image];
+  const src = image(step.image);
 
   return (
     <section
@@ -105,6 +107,7 @@ function Chapter({ step, index }: { step: (typeof journey)[number]; index: numbe
 }
 
 export default function StoriesPage() {
+  const image = useSiteImages();
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
 
@@ -120,7 +123,7 @@ export default function StoriesPage() {
           className="absolute inset-0"
         >
           <Image
-            src={brand.coverStories}
+            src={image("coverStories")}
             alt="Family gathered at a celebration"
             fill
             loading="eager"

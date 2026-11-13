@@ -1,5 +1,4 @@
 import { getServices, getPricingNote } from "@/lib/content/liveServices";
-import { brand } from "@/lib/content/brandImages";
 import { RevealText } from "@/components/ui/RevealText";
 import { HeroImage } from "@/components/ui/HeroImage";
 import { ServiceDetailRow } from "@/components/services/ServiceDetailRow";
@@ -10,7 +9,7 @@ export default async function ServicesPage() {
   return (
     <main>
       <section className="relative flex h-[60svh] min-h-[440px] w-full items-end overflow-hidden bg-black">
-        <HeroImage src={brand.coverServices} alt="Couple during a wedding ritual" />
+        <HeroImage slot="coverServices" alt="Couple during a wedding ritual" />
         <div className="relative z-10 px-6 pb-14 text-parchment md:px-12 md:pb-20">
           <p className="eyebrow mb-4 text-terracotta-soft">Services</p>
           <RevealText

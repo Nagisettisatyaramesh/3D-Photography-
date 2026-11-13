@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
-import { brand, type BrandImageKey } from "@/lib/content/brandImages";
+import { useSiteImages } from "@/components/providers/SiteImagesProvider";
+import type { SiteImageKey } from "@/lib/content/siteImages";
 import { siteConfig } from "@/lib/content/siteConfig";
 import { driftUp, staggerFloat, viewportOnce } from "@/lib/motion";
 import { FloatingButton } from "@/components/ui/FloatingButton";
 
-const tiles: { image: BrandImageKey; alt: string }[] = [
+const tiles: { image: SiteImageKey; alt: string }[] = [
   { image: "instagram1", alt: "Couple seated beside a floral rangoli" },
   { image: "instagram2", alt: "Portrait in a pink silk saree" },
   { image: "instagram3", alt: "Child portrait among flowers" },
@@ -19,6 +20,7 @@ const tiles: { image: BrandImageKey; alt: string }[] = [
 const handle = siteConfig.instagram.replace(/^https?:\/\/(www\.)?instagram\.com\//, "@").replace(/\/$/, "");
 
 export function InstagramFeed() {
+  const image = useSiteImages();
   return (
     <section className="px-6 py-24 md:px-12 md:py-32">
       <motion.div
@@ -49,7 +51,7 @@ export function InstagramFeed() {
             className="group relative aspect-square overflow-hidden"
           >
             <Image
-              src={brand[tile.image]}
+              src={image(tile.image)}
               alt={tile.alt}
               fill
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"

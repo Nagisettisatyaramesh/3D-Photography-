@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
-import { brand } from "@/lib/content/brandImages";
+import { useSiteImages } from "@/components/providers/SiteImagesProvider";
 import { driftUp, viewportOnce } from "@/lib/motion";
 import { FloatingButton } from "@/components/ui/FloatingButton";
 import { FloatingChip } from "@/components/ui/FloatingChip";
@@ -19,10 +19,11 @@ const occasions = [
 ];
 
 export function PricingCTA() {
+  const image = useSiteImages();
   return (
     <section className="relative overflow-hidden bg-ink px-6 py-28 text-parchment md:px-12 md:py-40">
       <div className="absolute inset-0 opacity-25">
-        <Image src={brand.backgroundPricing} alt="" fill className="object-cover" sizes="100vw" />
+        <Image src={image("backgroundPricing")} alt="" fill className="object-cover" sizes="100vw" />
       </div>
       <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink/85 to-ink" />
 

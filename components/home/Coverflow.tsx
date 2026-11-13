@@ -2,14 +2,15 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
-import { brand, type BrandImageKey } from "@/lib/content/brandImages";
+import { useSiteImages } from "@/components/providers/SiteImagesProvider";
+import type { SiteImageKey } from "@/lib/content/siteImages";
 import { driftUp, viewportOnce } from "@/lib/motion";
 import { FloatingButton } from "@/components/ui/FloatingButton";
 
 // [image, caption, rotateY deg, translateZ px] — one slot per stack
 // position. The two middle frames face almost front and the rest fan back
 // toward the edges; hover pulls any frame forward.
-const cards: [BrandImageKey, string, number, number][] = [
+const cards: [SiteImageKey, string, number, number][] = [
   ["galleryDepth1", "Bridal portrait", 46, -120],
   ["galleryDepth2", "Half saree portrait", 34, -75],
   ["galleryDepth3", "Ceremony blessing", 21, -35],
@@ -21,6 +22,7 @@ const cards: [BrandImageKey, string, number, number][] = [
 ];
 
 export function Coverflow() {
+  const image = useSiteImages();
   return (
     <section className="overflow-hidden py-28 md:py-40">
       <div className="mb-10 flex flex-wrap items-end justify-between gap-6 px-6 md:px-12">
@@ -45,7 +47,7 @@ export function Coverflow() {
             }}
           >
             <Image
-              src={brand[key]}
+              src={image(key)}
               alt={caption}
               fill
               // Requested well above the frame's CSS size (190/270px): these

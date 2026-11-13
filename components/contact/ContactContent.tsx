@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { motion } from "motion/react";
 import { buildWhatsAppLink } from "@/lib/utils";
-import { brand } from "@/lib/content/brandImages";
+import { useSiteImages } from "@/components/providers/SiteImagesProvider";
 import type { LiveSettings } from "@/lib/content/liveSettings";
 import { driftUp, expandReveal, staggerFloat, viewportOnce } from "@/lib/motion";
 import { RevealText } from "@/components/ui/RevealText";
@@ -11,6 +11,7 @@ import { EnquiryForm } from "@/components/forms/EnquiryForm";
 import { AvailabilityChecker } from "@/components/forms/AvailabilityChecker";
 
 export function ContactContent({ settings }: { settings: LiveSettings }) {
+  const image = useSiteImages();
   const mapsUrl = `https://maps.google.com/?q=${encodeURIComponent(settings.address)}`;
 
   const contactDetails = [
@@ -34,7 +35,7 @@ export function ContactContent({ settings }: { settings: LiveSettings }) {
       <section className="relative flex h-[55svh] min-h-[420px] w-full items-end overflow-hidden bg-black">
         <motion.div variants={expandReveal} initial="hidden" animate="visible" className="absolute inset-0">
           <Image
-            src={brand.coverContact}
+            src={image("coverContact")}
             alt="Guests walking together at a celebration"
             fill
             loading="eager"

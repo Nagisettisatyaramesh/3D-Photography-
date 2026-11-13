@@ -2,10 +2,14 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
+import { useSiteImages } from "@/components/providers/SiteImagesProvider";
+import type { SiteImageKey } from "@/lib/content/siteImages";
 
-/** `position` sets which part of the photo stays in view when the cover crops it,
+/** `slot` is the cover photo the admin can replace from /admin/site-images.
+ * `position` sets which part of the photo stays in view when the cover crops it,
  * e.g. "50% 0%" keeps the top. */
-export function HeroImage({ src, alt, position }: { src: string; alt: string; position?: string }) {
+export function HeroImage({ slot, alt, position }: { slot: SiteImageKey; alt: string; position?: string }) {
+  const image = useSiteImages();
   return (
     <motion.div
       initial={{ opacity: 0, scale: 1.08 }}
@@ -14,7 +18,7 @@ export function HeroImage({ src, alt, position }: { src: string; alt: string; po
       className="absolute inset-0"
     >
       <Image
-        src={src}
+        src={image(slot)}
         alt={alt}
         fill
         loading="eager"
