@@ -12,6 +12,9 @@ const eventTypes = [
   "Engagement",
   "Reception",
   "Destination Wedding",
+  "Birthday",
+  "Half Saree",
+  "Baby Shoot",
   "Other",
 ];
 

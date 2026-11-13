@@ -38,7 +38,7 @@ export const services: Service[] = [
       "A relaxed shoot away from the wedding-day schedule, designed to capture the chemistry between the two of you before the big day.",
     deliverables: ["Full-day, multi-location shoot", "Creative concepts & styling support", "Edited image set"],
     startingPrice: 45000,
-    image: "makeoverBrideCloseup",
+    image: "galleryDepth4",
   },
   {
     slug: "haldi-makeover",
@@ -70,4 +70,4 @@ export const services: Service[] = [
 ];
 
 export const pricingNote =
-  "Every wedding is different. Your quote should be too — we'll build a personalised proposal based on your events, coverage, location and deliverables.";
+  "Every celebration is different. Your quote should be too — we'll build a personalised proposal based on your events, coverage, location and deliverables.";

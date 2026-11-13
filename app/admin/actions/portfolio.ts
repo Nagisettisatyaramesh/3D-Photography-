@@ -1,4 +1,5 @@
 "use server";
+import { requireAdmin } from "@/lib/auth/admin";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -6,6 +7,7 @@ import { getSupabaseAdminClient } from "@/lib/supabase/adminClient";
 import { uploadMedia } from "@/lib/admin/upload";
 
 export async function createPortfolioItem(formData: FormData) {
+  await requireAdmin();
   const supabase = getSupabaseAdminClient();
   if (!supabase) return { error: "Supabase not configured." };
 
@@ -39,10 +41,12 @@ export async function createPortfolioItem(formData: FormData) {
 
   revalidatePath("/admin/portfolio");
   revalidatePath("/photography");
+  revalidatePath("/");
   redirect("/admin/portfolio");
 }
 
 export async function updatePortfolioItem(id: string, formData: FormData) {
+  await requireAdmin();
   const supabase = getSupabaseAdminClient();
   if (!supabase) return { error: "Supabase not configured." };
 
@@ -80,10 +84,12 @@ export async function updatePortfolioItem(id: string, formData: FormData) {
 
   revalidatePath("/admin/portfolio");
   revalidatePath("/photography");
+  revalidatePath("/");
   redirect("/admin/portfolio");
 }
 
 export async function deletePortfolioItem(id: string) {
+  await requireAdmin();
   const supabase = getSupabaseAdminClient();
   if (!supabase) return { error: "Supabase not configured." };
 
@@ -92,10 +98,12 @@ export async function deletePortfolioItem(id: string) {
 
   revalidatePath("/admin/portfolio");
   revalidatePath("/photography");
+  revalidatePath("/");
   return { success: true };
 }
 
 export async function removeGalleryImage(id: string, url: string) {
+  await requireAdmin();
   const supabase = getSupabaseAdminClient();
   if (!supabase) return { error: "Supabase not configured." };
 
@@ -106,5 +114,7 @@ export async function removeGalleryImage(id: string, url: string) {
   if (error) return { error: error.message };
 
   revalidatePath(`/admin/portfolio/${id}`);
+  revalidatePath("/photography");
+  revalidatePath("/");
   return { success: true };
 }

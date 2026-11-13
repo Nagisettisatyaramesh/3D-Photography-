@@ -2,11 +2,21 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
-import { services } from "@/lib/content/services";
 import { brand } from "@/lib/content/brandImages";
 import { driftUp, viewportOnce } from "@/lib/motion";
 import { FloatingButton } from "@/components/ui/FloatingButton";
 import { FloatingChip } from "@/components/ui/FloatingChip";
+
+const occasions = [
+  "Wedding",
+  "Engagement",
+  "Pre-Wedding",
+  "Birthday",
+  "Half Saree",
+  "Baby Shoot",
+  "Haldi & Makeover",
+  "Cinematic Films",
+];
 
 export function PricingCTA() {
   return (
@@ -24,7 +34,7 @@ export function PricingCTA() {
           viewport={viewportOnce}
           className="font-serif text-4xl italic leading-[1.1] md:text-6xl"
         >
-          Every wedding is different.
+          Every celebration is different.
           <br />
           Your quote should be too.
         </motion.p>
@@ -37,9 +47,9 @@ export function PricingCTA() {
           transition={{ delay: 0.15 }}
           className="mt-10 flex flex-wrap items-center justify-center gap-3"
         >
-          {services.slice(0, 3).map((s) => (
-            <FloatingChip key={s.slug} dark range={[10, -10]}>
-              {s.name} · from ₹{Math.round(s.startingPrice / 1000)}K
+          {occasions.map((name) => (
+            <FloatingChip key={name} dark range={[10, -10]}>
+              {name}
             </FloatingChip>
           ))}
         </motion.div>

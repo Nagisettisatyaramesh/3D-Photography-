@@ -1,5 +1,11 @@
 # Ilaya Studio — Public Website (Phase 1)
 
+## Current VPS deployment
+
+The `dev` deployment at `uniquecreations.co.in` uses the VPS PostgreSQL database, a private loopback PostgREST service, PostgreSQL-backed admin sessions, and persistent local media uploads. Hosted Supabase is no longer required. See [database/README.md](database/README.md) and `.env.local.example` for configuration. Enquiry notifications and quotation emails are sent through the SMTP settings in the same file.
+
+The older Phase 1 notes below describe the original implementation.
+
 Cinematic wedding photography & films studio site. Next.js (App Router) +
 TypeScript + Tailwind CSS + Motion.
 

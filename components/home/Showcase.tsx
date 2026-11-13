@@ -9,7 +9,7 @@ import { driftUp, viewportOnce } from "@/lib/motion";
 import { FloatingButton } from "@/components/ui/FloatingButton";
 
 const featured = portfolio.filter((p) =>
-  ["pw2", "gh2", "bh4", "mk1", "wd2", "hs3", "cm3", "wd4"].includes(p.id)
+  ["pre-wedding-2", "groom-haldi-2", "bride-haldi-4", "makeover-1", "wedding-2", "half-saree-3", "child-3", "wedding-4"].includes(p.id)
 );
 
 export function Showcase() {

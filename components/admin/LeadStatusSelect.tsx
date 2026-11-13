@@ -1,7 +1,8 @@
 "use client";
 
 import { useTransition } from "react";
-import { updateLeadStatus, leadStatuses } from "@/app/admin/actions/leads";
+import { updateLeadStatus } from "@/app/admin/actions/leads";
+import { leadStatuses } from "@/lib/admin/leadStatuses";
 
 export function LeadStatusSelect({ id, status }: { id: string; status: string }) {
   const [isPending, startTransition] = useTransition();

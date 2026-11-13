@@ -1,10 +1,12 @@
 "use server";
+import { requireAdmin } from "@/lib/auth/admin";
 
 import { revalidatePath } from "next/cache";
 import { getSupabaseAdminClient } from "@/lib/supabase/adminClient";
 import { uploadMedia } from "@/lib/admin/upload";
 
 export async function updateWebsiteSettings(formData: FormData) {
+  await requireAdmin();
   const supabase = getSupabaseAdminClient();
   if (!supabase) return { error: "Supabase not configured." };
 

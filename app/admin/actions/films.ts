@@ -1,4 +1,5 @@
 "use server";
+import { requireAdmin } from "@/lib/auth/admin";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -7,6 +8,7 @@ import { uploadMedia } from "@/lib/admin/upload";
 import { getYouTubeId, youTubeThumbnailUrl } from "@/lib/youtube";
 
 export async function createFilm(formData: FormData) {
+  await requireAdmin();
   const supabase = getSupabaseAdminClient();
   if (!supabase) return { error: "Supabase not configured." };
 
@@ -40,6 +42,7 @@ export async function createFilm(formData: FormData) {
 }
 
 export async function updateFilm(id: string, formData: FormData) {
+  await requireAdmin();
   const supabase = getSupabaseAdminClient();
   if (!supabase) return { error: "Supabase not configured." };
 
@@ -77,6 +80,7 @@ export async function updateFilm(id: string, formData: FormData) {
 }
 
 export async function deleteFilm(id: string) {
+  await requireAdmin();
   const supabase = getSupabaseAdminClient();
   if (!supabase) return { error: "Supabase not configured." };
 
